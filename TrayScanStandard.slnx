@@ -16,6 +16,7 @@
   <Project Path="lxuv/LinxUniverse.Logger/LinxUniverse.Logger.csproj" />
   <Project Path="lxuv/LinxUniverse.Mediator/LinxUniverse.Mediator.csproj" />
   <Project Path="lxuv/LinxUniverse.ProcessManager/LinxUniverse.ProcessManager.csproj" />
+  <Project Path="lxuv/LinxUniverse.SerialCommunicate/LinxUniverse.SerialCommunicate.csproj" Id="4beab67b-ed0b-4a5b-85fb-ec59a8d87656" />
   <Project Path="lxuv/LinxUniverse.Utils/LinxUniverse.Utils.csproj" />
   <Project Path="lxuv/LinxUniverse.VM.Webapi/LinxUniverse.VM.Webapi.csproj" />
   <Project Path="lxuv/LinxUniverse.VM/LinxUniverse.VM.csproj" />

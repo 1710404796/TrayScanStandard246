@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Queries;
 using TrayScanStandard.View;
@@ -27,6 +28,10 @@ namespace TrayScanStandard
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly TimeSpan _idleLockThreshold = TimeSpan.FromMinutes(30);
+        private DispatcherTimer _idleLockTimer;
+        private DateTime _lastInputUtc = DateTime.UtcNow;
+
         public MainViewModel ViewModel
         {
             get; set;
@@ -158,6 +163,8 @@ namespace TrayScanStandard
         }
         private void Window_Closed(object sender, EventArgs e)
         {
+            StopIdleLock();
+
             // Cleanup ViewModel resources
             ViewModel.Cleanup();
             ViewModel.CacheService.Cancel();
@@ -202,6 +209,67 @@ namespace TrayScanStandard
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SelectLangBox.SelectedIndex = MainStorage.Saves.Lang;
+            StartIdleLock();
+        }
+
+        private void StartIdleLock()
+        {
+            if (_idleLockTimer != null)
+                return;
+
+            _lastInputUtc = DateTime.UtcNow;
+            InputManager.Current.PreProcessInput += InputManager_PreProcessInput;
+
+            _idleLockTimer = new DispatcherTimer(DispatcherPriority.Background)
+            {
+                Interval = TimeSpan.FromSeconds(5)
+            };
+            _idleLockTimer.Tick += IdleLockTimer_Tick;
+            _idleLockTimer.Start();
+        }
+
+        private void StopIdleLock()
+        {
+            if (_idleLockTimer != null)
+            {
+                _idleLockTimer.Stop();
+                _idleLockTimer.Tick -= IdleLockTimer_Tick;
+                _idleLockTimer = null;
+            }
+
+            try
+            {
+                InputManager.Current.PreProcessInput -= InputManager_PreProcessInput;
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        private void InputManager_PreProcessInput(object sender, PreProcessInputEventArgs e)
+        {
+            if (e?.StagingItem?.Input is KeyEventArgs ||
+                e?.StagingItem?.Input is MouseEventArgs ||
+                e?.StagingItem?.Input is MouseButtonEventArgs)
+            {
+                _lastInputUtc = DateTime.UtcNow;
+            }
+        }
+
+        private void IdleLockTimer_Tick(object sender, EventArgs e)
+        {
+            if (ViewModel == null)
+                return;
+
+            if (ViewModel.IsLock == Visibility.Visible)
+                return;
+
+            if (DateTime.UtcNow - _lastInputUtc < _idleLockThreshold)
+                return;
+
+            ViewModel.SignOutCommand.Execute(null);
+            _lastInputUtc = DateTime.UtcNow;
         }
 
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -235,7 +303,7 @@ namespace TrayScanStandard
 
         private void LightBtn_Click(object sender, RoutedEventArgs e)
         {
-            NageTo<LightManagerView>();
+            NageTo<LightSourceControlView>();
 
         }
 

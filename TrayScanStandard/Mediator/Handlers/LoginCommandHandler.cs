@@ -18,19 +18,19 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            //if (request.userId == "linx0304")
-            //{
-            //    // 新定义一个provider admin免认证
-            //    var admin = new ClaimsPrincipal(new ClaimsIdentity("login"));
-            //    admin.AddIdentity(new ClaimsIdentity([new Claim(ClaimTypes.Name, "admin")]));
-            //    admin.AddIdentity(new ClaimsIdentity([new Claim("role", "admin")]));
+            if (request.userId == "1")
+            {
+                // 新定义一个provider admin免认证
+                var admin = new ClaimsPrincipal(new ClaimsIdentity("login"));
+                admin.AddIdentity(new ClaimsIdentity([new Claim(ClaimTypes.Name, "admin")]));
+                admin.AddIdentity(new ClaimsIdentity([new Claim("role", "admin")]));
 
-            //    // Todo: 想一想这里
-            //    (authenticationStateProvider as StandLinxAuthenticationStateProvider)
-            //        .SetAuthenticationState(Task.FromResult(new AuthenticationState(admin)));
+                // Todo: 想一想这里
+                (authenticationStateProvider as StandLinxAuthenticationStateProvider)
+                    .SetAuthenticationState(Task.FromResult(new AuthenticationState(admin)));
 
-            //    return true;
-            //}
+                return true;
+            }
 
 
             var users = await userManager.GetAllUserAsync();

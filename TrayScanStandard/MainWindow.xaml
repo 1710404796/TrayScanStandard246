@@ -28,9 +28,7 @@
 
 
 
-        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" >
-    
-</Image>-->
+        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" > </Image>-->
         <Border CornerRadius="20" 
                 Visibility="{Binding ViewModel.HasBackGround}"
                 Margin="20" 
@@ -50,35 +48,32 @@
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
            FontSize="20"
-           Text="{Binding ViewModel.Title}"
-           >
+           Text="{Binding ViewModel.Title}">
 
         </TextBlock>-->
       
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <!-- <StackPanel></StackPanel> -->
             <!--<Image 
-Grid.Column="1"
-VerticalAlignment="Center"
-Margin="0,5,100,5"
-Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
-
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="0,5,100,5"
+                        Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
 
             <!--<TextBlock
-    VerticalAlignment="Center"
-    FontSize="15"
-    Text="{x:Static lang:Resources.PLCStatus}"
-    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-></TextBlock>
-            <TextBlock
-    Text="{Binding ViewModel.PlcStatus}"
-    
-    VerticalAlignment="Center"
-    FontWeight="Bold"
-    Foreground="{Binding ViewModel.PlcColor}"
-    Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        Text="{x:Static lang:Resources.PLCStatus}"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"</TextBlock>
 
-    ></TextBlock>-->
+            <TextBlock
+                        Text="{Binding ViewModel.PlcStatus}"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Foreground="{Binding ViewModel.PlcColor}"
+                        Margin="10,0,0,0"
+
+                        ></TextBlock>-->
             <TextBlock VerticalAlignment="Center"
                        Margin="10,0,0,0"
                        Text="{x:Static lang:Resources.CurrentOperator}"
@@ -173,11 +168,12 @@ Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
                          Content="{x:Static lang:Resources.AccessControl}"
                          Click="PowerManager_Click">
             </RadioButton>
-            <!--<CheckBox HorizontalAlignment="Center" 
-              IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
-        Visibility="{Binding ViewModel.View2}"
-               Click="CheckBox_Click_1"
-              >测试模式</CheckBox>-->
+            <!--<CheckBox 
+                        HorizontalAlignment="Center" 
+                        IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
+                        Visibility="{Binding ViewModel.View2}"
+                        Click="CheckBox_Click_1">测试模式</CheckBox>-->
+
         </StackPanel>
 
         <Frame Grid.Row="1"

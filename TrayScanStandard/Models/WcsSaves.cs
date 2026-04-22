@@ -77,10 +77,13 @@ namespace TrayScanStandard.Models
         public bool IsAlgoEnable { get; set; } = true;
     }
 
+    /// <summary>
+    /// 光源
+    /// </summary>
+    /// <param name="Com">串口号</param>
+    /// <param name="Values">亮度值</param>
     public record LightInfo(string Com, int[] Values);
-    public record CameraSetting(
-
-        )
+    public record CameraSetting()
     {
         public CameraAddress CameraAddresses { get; set; } = new HKAddress(new Key(""));
         public int[] Exposure { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();

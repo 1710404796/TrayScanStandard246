@@ -22,6 +22,7 @@ using TrayScanStandard.Data;
 using TrayScanStandard.Jobs;
 using TrayScanStandard.Mediator.Behaviors;
 using TrayScanStandard.Service;
+using TrayScanStandard.Services;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
@@ -49,7 +50,7 @@ namespace TrayScanStandard
             //var a = typeof(T);
             if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
             {
-                throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
+                throw new ArgumentException($"{typeof(T)} 需要在App.xaml.cs.的ConfigureServices中进行注册。");
             }
 
             return service;
@@ -135,6 +136,12 @@ namespace TrayScanStandard
                          services.AddTransient<LightManagerView>();
                          services.AddTransient<LightManagerViewModel>();
 
+                         services.AddTransient<LightSourceControlView>();
+                         services.AddTransient<LightSourceControlViewModel>();
+
+                         // 光源服务（Wordop 使用单例 + 启动自动连接）
+                         services.AddSingleton<WordopLightService>();
+                         services.AddSingleton<CognexLightService>();
 
                          services.AddTransient<ImageDisplayView>();
                          services.AddSingleton<ImageDisplayViewModel>();
@@ -155,6 +162,7 @@ namespace TrayScanStandard
                          services.AddTransient<StationSettingView>();
 
 
+                         // 注入光源CST服务
                          services.AddCstService();
 
 
