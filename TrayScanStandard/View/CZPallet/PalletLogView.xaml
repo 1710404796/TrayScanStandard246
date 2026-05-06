@@ -17,66 +17,34 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="5">
-            <Button Content="{x:Static lang:Resources.Query}"
- Command="{Binding ViewModel.SearchCommand}"/>
-            <DatePicker SelectedDate="{Binding ViewModel.StartTime}" Margin="10,0,0,0"></DatePicker>
-            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
-               Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                Text="{x:Static lang:Resources.To}"
-                       
-    ></TextBlock>
+            <Button Content="查询" Command="{Binding ViewModel.SearchCommand}"/>
+            <DatePicker SelectedDate="{Binding ViewModel.StartTime}" Margin="10,0,0,0"/>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}" Text="至"/>
             <DatePicker SelectedDate="{Binding ViewModel.EndTime}" Margin="10,0,0,0"></DatePicker>
 
-            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
-           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                       
-                Text="{x:Static lang:Resources.TrayBarcode}"
-                       
-></TextBlock>
-            <TextBox Width="150" Margin="10,0,0,0" Text="{Binding ViewModel.Code}"
-                     VerticalContentAlignment="Center"
-                     
-                     ></TextBox>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}" Text="托盘条码"/>
+            <TextBox Width="150" Margin="10,0,0,0" Text="{Binding ViewModel.Code}" VerticalContentAlignment="Center"/>
 
-            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
-           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                       
-                Text="显示条目"
-                       
-></TextBlock>
-            <TextBox Width="150" Margin="10,0,0,0" Text="{Binding ViewModel.LogNum}"
-                     VerticalContentAlignment="Center"
-                     
-                     ></TextBox>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}" Text="显示条目"/>
+            <TextBox Width="150" Margin="10,0,0,0" Text="{Binding ViewModel.LogNum}" VerticalContentAlignment="Center"/>
 
-            <Button Content="{x:Static lang:Resources.DeriveCVS}" Margin="10,0,0,0"
-Command="{Binding ViewModel.ExportCommand}"/>
+            <Button Content="导出为CVS" Margin="10,0,0,0" Command="{Binding ViewModel.ExportCommand}"/>
             
-            
-            <Button Content="导出全部" Margin="10,0,0,0"
-Command="{Binding ViewModel.ExportAllCommand}"/>
+            <Button Content="导出全部" Margin="10,0,0,0" Command="{Binding ViewModel.ExportAllCommand}"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="1" 
-          CanUserAddRows="False"
-          AutoGenerateColumns="False"
-          ItemsSource="{Binding ViewModel.PalletLogs}"
->
+        <DataGrid Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding ViewModel.PalletLogs}">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="{x:Static lang:Resources.Check}" Binding="{Binding IsSelect}" IsReadOnly="False"></DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="{x:Static lang:Resources.TrayBarcode}" Binding="{Binding PalletCode}" ></DataGridTextColumn>
-                <DataGridTextColumn Header="{x:Static lang:Resources.AssemblyTime}" Binding="{Binding ZuPanTime}"></DataGridTextColumn>
-                <DataGridTextColumn Header="{x:Static lang:Resources.ChannelCount}" Binding="{Binding ChannelCount}"></DataGridTextColumn>
+                <DataGridCheckBoxColumn Header="勾选" Binding="{Binding IsSelect}" IsReadOnly="False"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="托盘条码" Binding="{Binding PalletCode}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="组盘时间" Binding="{Binding ZuPanTime, StringFormat=yyyy-MM-dd HH:mm:ss}"></DataGridTextColumn>
+                <DataGridTextColumn Header="通道数量" Binding="{Binding ChannelCount}"></DataGridTextColumn>
                 <DataGridTextColumn Header="识别条码数" Binding="{Binding RealCount}"></DataGridTextColumn>
                 <!--<DataGridTextColumn Header="托盘信息" Binding="{Binding }" ></DataGridTextColumn>-->
-                <DataGridTemplateColumn Header="{x:Static lang:Resources.TrayInformation}">
+                <DataGridTemplateColumn Header="托盘信息">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="{x:Static lang:Resources.TrayContents}"
-                    Tag="{Binding }"  
-                    HorizontalAlignment="Stretch"
-                    Width="Auto"
-                    Click="Button_Click" />
+                            <Button Content="托盘内容" Tag="{Binding }" HorizontalAlignment="Stretch" Width="Auto" Click="Button_Click" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

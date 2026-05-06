@@ -136,6 +136,12 @@ namespace TrayScanStandard.View
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(ConnectionValueBox.Text))
+                {
+                    MessageBox.Show("连接参数不能为空，请填写相机 Key/IP/Serial");
+                    return;
+                }
+
                 // Handle main exposure settings
                 string exposureLogMessage = $"曝光{string.Join(",", Setting.Exposure)}修改为{ExpPattern.Text}";
                 await mediator.Send(new OperationLogCommand(exposureLogMessage));

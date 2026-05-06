@@ -77,7 +77,7 @@ namespace TrayScanStandard.Service.Models
         /// 0-正常；非0-异常
         /// </summary>
         [JsonPropertyName("responseCode")]
-        public string ResponseCode { get; set; }
+        public int ResponseCode { get; set; }
         /// <summary>
         /// 请求结果描述
         /// responseCode != 0时可填入异常描述信息
@@ -90,13 +90,13 @@ namespace TrayScanStandard.Service.Models
         [JsonPropertyName("parameters")]
         public Dictionary<string, string> Parameters { get; set; } = new();
 
-        public bool Success => ResponseCode == "0";
+        public bool Success => ResponseCode == 0;
 
         public string? Message => ResponseMessage;
 
         public static GrabActionResponse DebugDefault => new()
         {
-            ResponseCode = "0",
+            ResponseCode = 0,
             ResponseMessage = "Success",
             Parameters = new()
             {

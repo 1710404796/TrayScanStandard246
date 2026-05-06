@@ -59,7 +59,7 @@ namespace TrayScanStandard.Service.Models
         [JsonPropertyName("statusMessage")]
         public string? StatusMessage { get; set; }
 
-        public string ResponseCode => StatusCode.ToString();
+        public int ResponseCode => StatusCode;
 
         public string? ResponseMessage => StatusMessage;
 

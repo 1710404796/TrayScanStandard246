@@ -54,12 +54,18 @@ namespace TrayScanStandard.Mediator.Handlers
 
             // 实现数据帧暂存
 
+            var data2DPath = Path.Combine(FilenameHelper.AppPath, "Data2D");
+            if (!Directory.Exists(data2DPath))
+            {
+                Directory.CreateDirectory(data2DPath);
+            }
+
             var dataFilenames = data.Map((IEnumerable<Image2DResult[]> d) =>
                                         d.Map(
                                             (ci, s) =>         // ci-Camera Index相机索引代表第几个相机，s是该相机的多张图片
                                                 s.Map((ei, s1) =>       // ei-Exposure Index 曝光索引代表第几次曝光索引，s1是单张图片
                                                 {
-                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}_{ci}_{ei}.png";
+                                                    var name = Path.Combine(data2DPath, $"{FilenameHelper.FileName}_{ci}_{ei}.png");
                                                     File.WriteAllBytes(name, s1.Data);
                                                     return name;
                                                 }).ToArray()
@@ -71,19 +77,18 @@ namespace TrayScanStandard.Mediator.Handlers
             dataFilenames.IfRight(s => { Console.WriteLine(s.FirstOrDefault()?.Count().ToString() ?? "dani"); });
             var tempResult = new DetectResult(
                 Enumerable.Range(0, request.BatteryTypeInfo.Count)
-                        .Select(s => new CodeInfo($"Test{s:000}", s, new())).ToArr()
+                          .Select(s => new CodeInfo($"Test{s:000}", s, new())).ToArr()
                 );
 
             dataFilenames.IfRight(f =>
             {
                 var d = f.Select(s => s.First());
-
                 mediator.Send(new PushImgCommand(d.ToArray()));
             });
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
                         camImgs
-                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
+                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCount))
                         .Map(
                             imgs => imgs.Item1
                                 .Map(s =>

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SerialCommunicate;
+// using SerialCommunicate; // 未实际使用，保留注释供回溯
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +28,7 @@ namespace TrayScanStandard.ViewModel
         private readonly CognexLightService _cognexService;
         private bool _isConnecting;
         private bool _isDisconnecting;
+        private bool _isLoadingConfig;
 
         // 防抖定时器
         private DispatcherTimer _debounceTimer;
@@ -56,6 +57,9 @@ namespace TrayScanStandard.ViewModel
 
         #region 配置文件路径初始化
 
+        /// <summary>
+        /// 初始化配置文件
+        /// </summary>
         private void InitializeConfigPaths()
         {
             _configDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config");
@@ -64,7 +68,7 @@ namespace TrayScanStandard.ViewModel
                 System.IO.Directory.CreateDirectory(_configDirectory);
             }
 
-            _globalConfigPath = System.IO.Path.Combine(_configDirectory, "GlobalConfig.json");
+            // _globalConfigPath = System.IO.Path.Combine(_configDirectory, "GlobalConfig.json");
             _wordopConfigPath = System.IO.Path.Combine(_configDirectory, "WordopConfig.json");
             _cognexConfigPath = System.IO.Path.Combine(_configDirectory, "CognexConfig.json");
         }
@@ -119,6 +123,9 @@ namespace TrayScanStandard.ViewModel
 
         #region 初始化方法
 
+        /// <summary>
+        /// 初始化延迟计时器
+        /// </summary>
         private void InitDebounceTimer()
         {
             _debounceTimer = new DispatcherTimer();
@@ -126,12 +133,22 @@ namespace TrayScanStandard.ViewModel
             _debounceTimer.Tick += DebounceTimer_Tick;
         }
 
+        /// <summary>
+        /// 延迟计时器计时器
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void DebounceTimer_Tick(object sender, EventArgs e)
         {
             _debounceTimer.Stop();
             await SetChannelBrightnessImmediate(_pendingChannel, _pendingBrightness);
         }
 
+        /// <summary>
+        /// 设置时间表亮度
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="brightness"></param>
         private void ScheduleSetBrightness(int channel, int brightness)
         {
             _pendingChannel = channel;
@@ -140,6 +157,12 @@ namespace TrayScanStandard.ViewModel
             _debounceTimer.Start();
         }
 
+        /// <summary>
+        /// 立即设置频道亮度
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="brightness"></param>
+        /// <returns></returns>
         private async Task SetChannelBrightnessImmediate(int channel, int brightness)
         {
             if (!IsConnected || _currentLightService == null)
@@ -147,7 +170,11 @@ namespace TrayScanStandard.ViewModel
 
             try
             {
-                await _currentLightService.SetBrightnessAsync(channel, brightness);
+                var ok = await _currentLightService.SetBrightnessAsync(channel, brightness);
+                if (!ok)
+                {
+                    LogWarning($"设置亮度失败: CH{channel}={brightness}", showInStatusBar: false);
+                }
             }
             catch (Exception ex)
             {
@@ -167,6 +194,10 @@ namespace TrayScanStandard.ViewModel
             ReadVersionCommand = new RelayLightCommand(async _ => await ReadVersionAsync(), _ => CanOperate());
         }
 
+
+        /// <summary>
+        /// 初始化光源服务
+        /// </summary>
         private void InitializeLightService()
         {
             switch (SelectedLightType)
@@ -232,9 +263,10 @@ namespace TrayScanStandard.ViewModel
             {
                 if (_selectedLightType != value)
                 {
+                    // 先保存当前类型的参数，再切换目标类型
                     SaveCurrentLightConfig();
-                    SaveGlobalConfig();
                     _selectedLightType = value;
+                    SaveGlobalConfig();
                     OnPropertyChanged();
                     InitializeLightService();
                     LoadCurrentLightConfig();
@@ -270,10 +302,13 @@ namespace TrayScanStandard.ViewModel
                     _channel1Brightness = newValue;
                     OnPropertyChanged();
 
-                    if (IsConnected)
+                    if (IsConnected && !_isLoadingConfig)
                         ScheduleSetBrightness(1, newValue);
 
-                    SaveCurrentLightConfig();
+                    if (!_isLoadingConfig)
+                    {
+                        SaveCurrentLightConfig();
+                    }
                 }
             }
         }
@@ -290,10 +325,13 @@ namespace TrayScanStandard.ViewModel
                     _channel2Brightness = newValue;
                     OnPropertyChanged();
 
-                    if (IsConnected)
+                    if (IsConnected && !_isLoadingConfig)
                         ScheduleSetBrightness(2, newValue);
 
-                    SaveCurrentLightConfig();
+                    if (!_isLoadingConfig)
+                    {
+                        SaveCurrentLightConfig();
+                    }
                 }
             }
         }
@@ -310,10 +348,13 @@ namespace TrayScanStandard.ViewModel
                     _channel3Brightness = newValue;
                     OnPropertyChanged();
 
-                    if (IsConnected)
+                    if (IsConnected && !_isLoadingConfig)
                         ScheduleSetBrightness(3, newValue);
 
-                    SaveCurrentLightConfig();
+                    if (!_isLoadingConfig)
+                    {
+                        SaveCurrentLightConfig();
+                    }
                 }
             }
         }
@@ -330,10 +371,13 @@ namespace TrayScanStandard.ViewModel
                     _channel4Brightness = newValue;
                     OnPropertyChanged();
 
-                    if (IsConnected)
+                    if (IsConnected && !_isLoadingConfig)
                         ScheduleSetBrightness(4, newValue);
 
-                    SaveCurrentLightConfig();
+                    if (!_isLoadingConfig)
+                    {
+                        SaveCurrentLightConfig();
+                    }
                 }
             }
         }
@@ -375,19 +419,53 @@ namespace TrayScanStandard.ViewModel
 
         #region 命令
 
+        /// <summary>
+        /// 连接命令
+        /// </summary>
         public ICommand ConnectCommand { get; private set; }
+
+        /// <summary>
+        /// 断开连接命令
+        /// </summary>
         public ICommand DisconnectCommand { get; private set; }
+
+        /// <summary>
+        /// 刷新通信端口命令
+        /// </summary>
         public ICommand RefreshComPortsCommand { get; private set; }
+
+        /// <summary>
+        /// 启用所有命令
+        /// </summary>
         public ICommand TurnOnAllCommand { get; private set; }
+
+        /// <summary>
+        /// 关闭所有命令
+        /// </summary>
         public ICommand TurnOffAllCommand { get; private set; }
+
+        /// <summary>
+        /// 保存配置命令
+        /// </summary>
         public ICommand SaveConfigCommand { get; private set; }
+
+        /// <summary>
+        /// 读取所有通道命令
+        /// </summary>
         public ICommand ReadAllChannelsCommand { get; private set; }
+
+        /// <summary>
+        /// 读取版本号命令
+        /// </summary>
         public ICommand ReadVersionCommand { get; private set; }
 
         #endregion
 
         #region 命令状态判断
-
+        /// <summary>
+        /// 可以连接
+        /// </summary>
+        /// <returns></returns>
         private bool CanConnect() =>
             !IsConnected &&
             !_isConnecting &&
@@ -395,18 +473,29 @@ namespace TrayScanStandard.ViewModel
             _currentLightService != null &&
             !string.IsNullOrEmpty(SelectedComPort);
 
+        /// <summary>
+        /// 可断开连接
+        /// </summary>
+        /// <returns></returns>
         private bool CanDisconnect() =>
             IsConnected &&
             !_isConnecting &&
             !_isDisconnecting &&
             _currentLightService != null;
 
+        /// <summary>
+        /// 可操作
+        /// </summary>
+        /// <returns></returns>
         private bool CanOperate() =>
             IsConnected &&
             !_isConnecting &&
             !_isDisconnecting &&
             _currentLightService != null;
 
+        /// <summary>
+        /// 刷新命令
+        /// </summary>
         private void RefreshCommands()
         {
             (ConnectCommand as RelayLightCommand)?.RaiseCanExecuteChanged();
@@ -438,6 +527,10 @@ namespace TrayScanStandard.ViewModel
             public LightType LastLightType { get; set; }
         }
 
+        /// <summary>
+        /// 读取光源配置路径
+        /// </summary>
+        /// <returns></returns>
         private string GetCurrentLightConfigPath()
         {
             switch (SelectedLightType)
@@ -448,6 +541,9 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 加载全局配置
+        /// </summary>
         private void LoadGlobalConfig()
         {
             try
@@ -469,6 +565,9 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 保存全局配置
+        /// </summary>
         private void SaveGlobalConfig()
         {
             try
@@ -483,6 +582,9 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 保存当前灯光配置
+        /// </summary>
         private void SaveCurrentLightConfig()
         {
             try
@@ -515,10 +617,22 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 加载当前灯光配置
+        /// </summary>
         private void LoadCurrentLightConfig()
         {
+            _isLoadingConfig = true;
             try
             {
+                // 先重置为当前光源类型的默认值，避免沿用上一类型的界面残留数据
+                Channel1Brightness = 0;
+                Channel2Brightness = 0;
+                Channel3Brightness = 0;
+                Channel4Brightness = 0;
+                SelectedComPort = string.Empty;
+                SelectedBaudRate = SelectedLightType == LightType.Wordop ? 19200 : 9600;
+
                 string configPath = GetCurrentLightConfigPath();
 
                 if (System.IO.File.Exists(configPath))
@@ -540,27 +654,23 @@ namespace TrayScanStandard.ViewModel
                             SelectedBaudRate = config.LastBaudRate;
 
                         string comDisplay = string.IsNullOrEmpty(SelectedComPort) ? "未选择" : SelectedComPort;
-                        LogSuccess($"已加载配置 | {CurrentLightServiceName} | CH1={Channel1Brightness} CH2={Channel2Brightness} CH3={Channel3Brightness} CH4={Channel4Brightness} | COM={comDisplay} | 波特率={SelectedBaudRate}", showInStatusBar: true);
+                        // LogSuccess($"已加载配置 | {CurrentLightServiceName} | CH1={Channel1Brightness} CH2={Channel2Brightness} CH3={Channel3Brightness} CH4={Channel4Brightness} | COM={comDisplay} | 波特率={SelectedBaudRate}", showInStatusBar: true);
                     }
                 }
                 else
                 {
-                    Channel1Brightness = 0;
-                    Channel2Brightness = 0;
-                    Channel3Brightness = 0;
-                    Channel4Brightness = 0;
-                    SelectedBaudRate = SelectedLightType == LightType.Wordop ? 19200 : 9600;
                     LogInfo($"首次使用 {CurrentLightServiceName} 光源，使用默认配置", showInStatusBar: true);
                 }
             }
             catch (Exception ex)
             {
                 LogError($"加载配置失败: {ex.Message}");
-                Channel1Brightness = 0;
-                Channel2Brightness = 0;
-                Channel3Brightness = 0;
-                Channel4Brightness = 0;
+                SelectedComPort = string.Empty;
                 SelectedBaudRate = SelectedLightType == LightType.Wordop ? 19200 : 9600;
+            }
+            finally
+            {
+                _isLoadingConfig = false;
             }
         }
 
@@ -568,6 +678,9 @@ namespace TrayScanStandard.ViewModel
 
         #region 私有方法
 
+        /// <summary>
+        /// 加载端口配置
+        /// </summary>
         private void LoadComPorts()
         {
             try
@@ -635,6 +748,7 @@ namespace TrayScanStandard.ViewModel
 
                 if (IsConnected)
                 {
+                    await TurnOffAllChannelsAfterConnectAsync();
                     LogSuccess($"已成功连接到 {SelectedComPort} ({_currentLightService.ServiceName})", showInStatusBar: true);
                 }
                 else
@@ -654,6 +768,10 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 断开连接
+        /// </summary>
+        /// <returns></returns>
         private Task DisconnectAsync()
         {
             if (_currentLightService == null)
@@ -688,6 +806,38 @@ namespace TrayScanStandard.ViewModel
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 连接成功后默认灭灯，亮灯仅在扫码任务触发时执行。
+        /// </summary>
+        private async Task TurnOffAllChannelsAfterConnectAsync()
+        {
+            if (!IsConnected || _currentLightService == null)
+            {
+                return;
+            }
+
+            try
+            {
+                for (int channel = 1; channel <= 4; channel++)
+                {
+                    var ok = await _currentLightService.SetBrightnessAsync(channel, 0);
+                    if (!ok)
+                    {
+                        LogWarning($"连接后默认灭灯失败: CH{channel}=0", showInStatusBar: false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWarning($"连接后默认灭灯异常: {ex.Message}", showInStatusBar: false);
+            }
+        }
+
+        /// <summary>
+        /// 设置所有通道
+        /// </summary>
+        /// <param name="brightness"></param>
+        /// <returns></returns>
         private async Task SetAllChannelsAsync(int brightness)
         {
             int limitedBrightness = Math.Min(Math.Max(brightness, 0), 255);
@@ -714,21 +864,28 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 读取所有通道同步
+        /// </summary>
+        /// <returns></returns>
         private async Task ReadAllChannelsAsync()
         {
             if (!IsConnected || _currentLightService == null)
             {
                 ReadStatus = "未连接，无法读取";
+                LogWarning("读取所有通道失败：未连接", showInStatusBar: true);
                 return;
             }
 
             try
             {
                 ReadStatus = "正在读取所有通道...";
+                LogInfo($"开始读取所有通道 | 光源={CurrentLightServiceName} | COM={SelectedComPort} | 波特率={SelectedBaudRate}", showInStatusBar: true);
 
                 for (int ch = 1; ch <= 4; ch++)
                 {
                     int brightness = await _currentLightService.GetBrightnessAsync(ch);
+                    LogInfo($"读取通道结果 CH{ch}={brightness}", showInStatusBar: false);
 
                     switch (ch)
                     {
@@ -740,6 +897,14 @@ namespace TrayScanStandard.ViewModel
                 }
 
                 ReadStatus = "读取完成";
+                if (Channel1Brightness < 0 || Channel2Brightness < 0 || Channel3Brightness < 0 || Channel4Brightness < 0)
+                {
+                    LogWarning($"读取完成但存在无效值 | CH1={Channel1Brightness} CH2={Channel2Brightness} CH3={Channel3Brightness} CH4={Channel4Brightness}", showInStatusBar: true);
+                }
+                else
+                {
+                    LogSuccess($"读取完成 | CH1={Channel1Brightness} CH2={Channel2Brightness} CH3={Channel3Brightness} CH4={Channel4Brightness}", showInStatusBar: true);
+                }
                 System.Diagnostics.Debug.WriteLine($"读取所有通道完成 | CH1={Channel1Brightness} CH2={Channel2Brightness} CH3={Channel3Brightness} CH4={Channel4Brightness}");
             }
             catch (Exception ex)
@@ -749,6 +914,10 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        /// <summary>
+        /// 读取版本号
+        /// </summary>
+        /// <returns></returns>
         private async Task ReadVersionAsync()
         {
             if (!IsConnected || _currentLightService == null)
@@ -776,6 +945,11 @@ namespace TrayScanStandard.ViewModel
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// 属性更改
+        /// </summary>
+        /// <param name="name"></param>
         protected void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 

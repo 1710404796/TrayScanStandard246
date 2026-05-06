@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Quartz;
+using TrayScanStandard.ViewModel;
 
 namespace TrayScanStandard.Jobs
 {
-    internal class HourJobs() : IJob
+    internal class HourJobs(MainViewModel mainViewModel) : IJob
     {
         /// <summary>
         /// 每日执行任务
@@ -20,8 +21,11 @@ namespace TrayScanStandard.Jobs
             Console.WriteLine("11111111111111");
 
 
+            //检查WCS是否启用
+            if (!mainViewModel.IsWcsEnable) return Task.CompletedTask;
+
             var files = new DirectoryInfo("Data2D").GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
-            
+
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];

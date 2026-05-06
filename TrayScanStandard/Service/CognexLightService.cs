@@ -14,7 +14,7 @@ namespace TrayScanStandard.Services
         private bool _isConnected;
 
         public bool IsConnected => _isConnected;
-        public string ServiceName => "Cognex";
+        public string ServiceName => "Cognex康耐视";
 
         public async Task<bool> ConnectAsync(string comPort, int baudRate)
         {

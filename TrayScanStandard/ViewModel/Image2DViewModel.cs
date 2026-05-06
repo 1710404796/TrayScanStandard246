@@ -79,7 +79,7 @@ namespace TrayScanStandard.ViewModel
         public int DebugExpoure
         {
             get; set;
-        } = 5000;
+        } = 2000;
 
         [ObservableProperty]
         int _roiPadding = 100;
@@ -99,10 +99,10 @@ namespace TrayScanStandard.ViewModel
 
         // 批量配置边框尺寸的属性
         [ObservableProperty]
-        private int _batchWidth = 600;
+        private int _batchWidth = 200;
 
         [ObservableProperty]
-        private int _batchHeight = 600;
+        private int _batchHeight = 200;
 
         // 跟踪是否有未保存的修改
         [ObservableProperty]
@@ -234,8 +234,8 @@ namespace TrayScanStandard.ViewModel
                 },
                 Bottom: () => 
                 {
-                    _mediator.Send(new WarningBoxCommand("Detect failed")).Wait();
-                    _logger.LogError("Detect failed");
+                    _mediator.Send(new WarningBoxCommand("检测失败")).Wait();
+                    _logger.LogError("检测失败");
                 }
                 );
             // 理论上 一定会有结果
@@ -355,6 +355,7 @@ namespace TrayScanStandard.ViewModel
 
                 );
 
+            #region
             //if (SelectBattery == null)
             //{
             //    MessageBox.Show("未选择托盘类型");
@@ -437,13 +438,14 @@ namespace TrayScanStandard.ViewModel
             //}
 
             // 撕烤一下更新
-
+            #endregion
             Update();
         }
 
         public void DrawAImage()
         {
 
+            #region
             //if (SelectBattery == null)
             //{
             //    MessageBox.Show("未选择托盘类型");
@@ -470,6 +472,7 @@ namespace TrayScanStandard.ViewModel
 
             //}
             //nImage.Save(ResultImg.Replace(".jpg", "-Result.jpg"));
+            #endregion
         }
     }
 }

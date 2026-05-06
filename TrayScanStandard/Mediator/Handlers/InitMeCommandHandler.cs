@@ -1,6 +1,8 @@
 ﻿using Humanizer;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
+using LinxUniverse.DI;
+using LinxUniverse.PLCProtos;
 using LinxUniverse.Utils;
 using LinxUniverse.VM;
 using MediatR;
@@ -15,11 +17,13 @@ using System.Windows;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Models;
+using TrayScanStandard.PLC;
 using TrayScanStandard.Service;
 using TrayScanStandard.Services;
-using TrayScanStandard.Models;
+using TrayScanStandard.ViewModel;
 using VMWebAIClient;
-using static SerialCommunicate.ASCII_Data;
+// using static SerialCommunicate.ASCII_Data; // 未实际调用ASCII_Data成员，保留注释供回溯
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -31,12 +35,15 @@ namespace TrayScanStandard.Mediator.Handlers
     /// <param name="role"></param>
     public class InitMeCommandHandler(IMediator mediator,
         ILogger<InitMeCommandHandler> logger,
-        RoleManager<LinxRole, LinxUser> role
-        , ScanCameraService scanCameraService
-        , LinxContext linxContext
-        , IVMWebAIClient vmWebAIClient
-        , WordopLightService wordopLightService
-        )
+        RoleManager<LinxRole, LinxUser> role, 
+        ScanCameraService scanCameraService,
+        PLCTaskService<TrayScanStandardCCDContext> pLCTaskService,
+        WcsTrayScanStandardServer  wcsTrayScanStandardServer,
+        PlcModbusHealthService plcModbusHealthService,
+        LinxContext linxContext,
+        CacheService cacheService,
+        IVMWebAIClient vmWebAIClient, 
+        WordopLightService wordopLightService)
         : IRequestHandler<InitMeCommand>
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
@@ -80,6 +87,30 @@ namespace TrayScanStandard.Mediator.Handlers
                     MessageBox.Show(algoInitializationResult.ErrorMessage, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                // 原逻辑（保留）：
+                 await pLCTaskService.Init(new LinxUniverse.PLC.Meditor.Commands.S7CreatePlcCommand(S7.Net.CpuType.S71200, MainStorage.Saves.PlcIp, 0, 1), cacheService.Token);
+
+                // 触发WCS Socket服务在启动阶段初始化（构造函数内部已完成连接）
+                _ = wcsTrayScanStandardServer;
+
+                plcModbusHealthService.StartMonitoring(isConnected =>
+                {
+                    var dispatcher = Application.Current?.Dispatcher;
+                    if (dispatcher == null)
+                    {
+                        return;
+                    }
+
+                    dispatcher.Invoke(() =>
+                    {
+                        // 原注释（保留参考）：
+                        // PlcIsRunning = XcplcService.IsPlcRunning;
+                        // 新增：将Modbus TCP连通状态同步到主界面PLC状态灯
+                        App.GetService<MainViewModel>().PlcIsRunning = isConnected;
+                    });
+                });
+
 
                 logger.LogInformation("所有初始化步骤完成");
             }

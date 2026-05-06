@@ -103,15 +103,25 @@ namespace TrayScanStandard
                                  trigger.ForJob(jobKey1).WithCronSchedule("0 10 * * * ?");
                              });
 
-                         });
+                             JobKey heartbeatJobKey = JobKey.Create(nameof(HeartbeatJobs));
+                             config.AddJob<HeartbeatJobs>(heartbeatJobKey).AddTrigger(trigger =>
+                             {
+                                 trigger.ForJob(heartbeatJobKey)
+                                     .StartNow()
+                                     .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever());
+                             });
 
+                         });
 
                          services.AddQuartzHostedService(config =>
                          {
                              config.WaitForJobsToComplete = true;
                          });
 
-                         services.AddSingleton<LinxAuthenticationStateProvider, StandLinxAuthenticationStateProvider<LinxUser>>();
+                         // 原实现（保留）：
+                         // services.AddSingleton<LinxAuthenticationStateProvider, StandLinxAuthenticationStateProvider<LinxUser>>();
+                         // 新实现：使用项目内Provider，避免基线库15分钟重验证导致强制锁屏
+                         services.AddSingleton<LinxAuthenticationStateProvider, TrayScanAuthenticationStateProvider>();
 
                          services.AddAuth<LinxUser>();
 
@@ -158,6 +168,8 @@ namespace TrayScanStandard
                          services.AddSingleton<CacheService>();
 
                          services.AddSingleton<ScanCameraService>();
+                         services.AddSingleton<WcsTrayScanStandardServer>();
+                         services.AddSingleton<PlcModbusHealthService>();
 
                          services.AddTransient<StationSettingView>();
 
@@ -197,9 +209,13 @@ namespace TrayScanStandard
                      })
                      .ConfigureWebHostDefaults(webHostBuilder =>
                      {
-
+                        
                          webHostBuilder.UseStartup<Startup>();
-                         webHostBuilder.UseUrls($"http://*:{MainViewModel.Saves.Port}");
+                         // 原实现（保留）：
+                         // webHostBuilder.UseUrls($"http://*:{MainViewModel.Saves.WcsHeartPort}");
+                         // 新实现：程序内部WebHost使用独立端口，避免与WCS心跳Socket端口冲突导致“自连接在线”
+                         const int localApiPort = 18080;
+                         webHostBuilder.UseUrls($"http://*:{localApiPort}");
                          webHostBuilder.ConfigureKestrel((context, options) =>
                          {
                              // Handle requests up to 50 MB
@@ -259,6 +275,20 @@ namespace TrayScanStandard
 
             var res =  manager.StartProcessAsync("vmapi").Result;
             Host.Start();
+
+            try
+            {
+                GetService<ScanCameraService>().Init();
+                logger.LogInformation("启动初始化：已触发相机自动连接");
+
+                var lightViewModel = GetService<LightSourceControlViewModel>();
+                lightViewModel.ConnectCommand.Execute(null);
+                logger.LogInformation("启动初始化：已触发光源自动连接");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "启动初始化：设备自动连接触发失败");
+            }
         }
         static ProcessManager manager;
         private static void InitContext()

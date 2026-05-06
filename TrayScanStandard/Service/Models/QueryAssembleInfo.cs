@@ -46,7 +46,7 @@ namespace TrayScanStandard.Service.Models
         /// 0-正常；非0-异常
         /// </summary>
         [JsonPropertyName("responseCode")]
-        public string ResponseCode { get; set; }
+        public int ResponseCode { get; set; }
 
         /// <summary>
         /// 请求结果描述
@@ -104,14 +104,14 @@ namespace TrayScanStandard.Service.Models
         [JsonPropertyName("materials")]
         public List<AssembleMaterialInfo> Materials { get; set; } = new();
 
-        public bool Success => ResponseCode == "0";
+        public bool Success => ResponseCode == 0;
 
 
         public string? Message => ResponseMessage;
 
         public static QueryAssembleInfoResponse DebugDefault => new()
         {
-            ResponseCode = "0",
+            ResponseCode = 0,
             ResponseMessage = "Success",
             Materials = []
         };

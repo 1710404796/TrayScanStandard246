@@ -55,14 +55,16 @@ namespace TrayScanStandard.Service.Models
         /// </summary>
         [JsonPropertyName("statusMessage")]
         public string? StatusMessage { get; set; }
-        [JsonIgnore]
-        public string ResponseCode => StatusCode.ToString();
+        //[JsonIgnore]
+        //public string ResponseCode => StatusCode.ToString();
         [JsonIgnore]
         public string? ResponseMessage => StatusMessage;
 
         public bool Success => StatusCode == 0;
 
         public string? Message => StatusMessage;
+
+        public int ResponseCode => throw new NotImplementedException();
     }
     /// <summary>
     /// 状态类型

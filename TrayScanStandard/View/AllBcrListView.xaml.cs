@@ -60,6 +60,10 @@ namespace TrayScanStandard.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateRatio();
+            if (CRService.BcrBorderViewModels.Length != MainStorage.Saves.CameraCount)
+            {
+                CRService.Init();
+            }
 
             int idx = 0;
             double x = 10, y = 10; // 初始位置
@@ -67,7 +71,7 @@ namespace TrayScanStandard.View
             double itemWidth = 320, itemHeight = 320;
             double spacing = 10;
 
-            foreach (var item in CRService.BcrBorderViewModels)
+            foreach (var item in CRService.BcrBorderViewModels.Take(MainStorage.Saves.CameraCount))
             {
                 int i = idx;
                 var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
@@ -282,7 +286,14 @@ namespace TrayScanStandard.View
 
             try
             {
-                var res = await meditor.Send(new DetectCCDCommand(MainStorage.SelectBattery));
+                var battery = EnsureSelectedBattery();
+                if (battery == null)
+                {
+                    MessageBox.Show("电池信息为空");
+                    return;
+                }
+
+                var res = await meditor.Send(new DetectCCDCommand(battery));
                 logger.LogInformation("结果: {0}", res);
 
                 res.Match(
@@ -333,7 +344,15 @@ namespace TrayScanStandard.View
                 {
                     try
                     {
-                        var res = await meditor.Send(new DetectCCDCommand(MainStorage.SelectBattery));
+                        var battery = EnsureSelectedBattery();
+                        if (battery == null)
+                        {
+                            logger.LogWarning("调试扫码失败：电池信息为空");
+                            await Task.Delay(1000);
+                            continue;
+                        }
+
+                        var res = await meditor.Send(new DetectCCDCommand(battery));
                         UpdateRatio();
                     }
                     catch (Exception ex)
@@ -353,6 +372,35 @@ namespace TrayScanStandard.View
             GC.Collect();
             //MainStorage.Saves.OkCnt = MainStorage.Saves.ScanCnt = 0;    
             UpdateRatio();
+        }
+
+        private BatteryTypeInfo? EnsureSelectedBattery()
+        {
+            if (MainStorage.SelectBattery != null)
+            {
+                return MainStorage.SelectBattery;
+            }
+
+            try
+            {
+                var battery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId)
+                    ?? linxContext.BatteryTypeInfos.FirstOrDefault();
+
+                MainStorage.SelectBattery = battery;
+                if (battery != null)
+                {
+                    MainStorage.Saves.SelectBatteryId = battery.Id;
+                    MainStorage.SaveManager.Save();
+                    logger.LogInformation("兜底加载电池信息成功：Id={Id}", battery.Id);
+                }
+
+                return battery;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "兜底加载电池信息失败");
+                return null;
+            }
         }
     }
 }

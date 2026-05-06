@@ -18,7 +18,7 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            if (request.userId == "1")
+            if (request.userId == "linx0304")
             {
                 // 新定义一个provider admin免认证
                 var admin = new ClaimsPrincipal(new ClaimsIdentity("login"));

@@ -23,9 +23,7 @@ using VMWebAIClient;
 
 namespace TrayScanStandard
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window
     {
         private readonly TimeSpan _idleLockThreshold = TimeSpan.FromMinutes(30);
@@ -144,23 +142,39 @@ namespace TrayScanStandard
             }
         }
 
-
+        /// <summary>
+        /// 日志窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LogDash_Click(object sender, RoutedEventArgs e)
         {
             NageTo<LogDashBoardView>();
         }
 
+        /// <summary>
+        /// 程序参数设定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Setting_Click(object sender, RoutedEventArgs e)
         {
             NageTo<SettingView>();
 
         }
 
+        /// <summary>
+        /// 权限管理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PowerManager_Click(object sender, RoutedEventArgs e)
         {
             NageTo<UserManagerView>();
 
         }
+
+       
         private void Window_Closed(object sender, EventArgs e)
         {
             StopIdleLock();
@@ -175,6 +189,11 @@ namespace TrayScanStandard
             MainStorage.SaveManager.Save();
         }
 
+        /// <summary>
+        /// 语言下拉框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SelectLangBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (MainStorage.Saves.Lang == SelectLangBox.SelectedIndex)
@@ -272,6 +291,11 @@ namespace TrayScanStandard
             _lastInputUtc = DateTime.UtcNow;
         }
 
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             App.GetService<CacheService>().Cancel();
@@ -301,29 +325,54 @@ namespace TrayScanStandard
 
         }
 
+        /// <summary>
+        /// 光源管理界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LightBtn_Click(object sender, RoutedEventArgs e)
         {
             NageTo<LightSourceControlView>();
 
         }
 
+        /// <summary>
+        /// 相机管理界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CameraList_Click(object sender, RoutedEventArgs e)
         {
             NageTo<AllBcrListView>();
 
         }
 
+        /// <summary>
+        /// 电芯种类管理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BatteryManager_Click(object sender, RoutedEventArgs e)
         {
             NageTo<BatteryManager>();
 
         }
 
+        /// <summary>
+        /// 组盘扫码日志
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ZPALgo_Click(object sender, RoutedEventArgs e)
         {
             NageTo<PalletLogView>();
         }
 
+        /// <summary>
+        /// 电芯条码显示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
             NageTo<ImageDisplayView>();

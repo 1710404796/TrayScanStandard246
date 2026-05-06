@@ -53,7 +53,9 @@ namespace TrayScanStandard.ViewModel
             XYLStation =  new Pallet(1,"1") { Column = MainStorage.SelectBattery?.Column ?? 1, ChannelNum = MainStorage.SelectBattery?.Count ?? 0 };
             _linxContext = linxContext;
             Refresh();
-            SelectBatteryInfo = BatteryInfos.FirstOrDefault(s => s.Id == MainStorage.SelectBattery?.Id) ?? new();
+            SelectBatteryInfo = BatteryInfos.FirstOrDefault(s => s.Id == MainStorage.SelectBattery?.Id)
+                ?? BatteryInfos.FirstOrDefault()
+                ?? new();
         }
 
 

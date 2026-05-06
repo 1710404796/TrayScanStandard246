@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <!-- ========== 连接设置区域 ========== -->
-        <GroupBox Header="连接设置" Grid.Row="0">
+        <GroupBox Header="光源设置" Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

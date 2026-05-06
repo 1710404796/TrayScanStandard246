@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TrayScanStandard.Services
 {
@@ -21,23 +22,25 @@ namespace TrayScanStandard.Services
 
         /// <summary>
         /// 构建设置亮度指令
-        /// 格式: CHx=yyy\r\n
+        /// Demo格式: $L0=20# / $L1=20# / ...
         /// </summary>
         /// <param name="channel">通道 (1-4)</param>
         /// <param name="brightness">亮度 (0-255)</param>
         public byte[] BuildSetBrightness(int channel, int brightness)
         {
-            string command = $"CH{channel}={brightness:D3}\r\n";
+            int deviceChannel = Math.Clamp(channel - 1, 0, 3);
+            int value = Math.Clamp(brightness, 0, 255);
+            string command = $"$L{deviceChannel}={value}#";
             return Encoding.ASCII.GetBytes(command);
         }
 
         /// <summary>
         /// 构建读取亮度指令
-        /// 格式: CHx?\r\n
+        /// Demo主要通过读取参数获取L0~L3，统一走 $RD=9999#
         /// </summary>
         public byte[] BuildGetBrightness(int channel)
         {
-            string command = $"CH{channel}?\r\n";
+            string command = "$RD=9999#";
             return Encoding.ASCII.GetBytes(command);
         }
 
@@ -46,7 +49,7 @@ namespace TrayScanStandard.Services
         /// </summary>
         public byte[] BuildReadVersion()
         {
-            string command = "VERSION\r\n";
+            string command = "$VD=1#";
             return Encoding.ASCII.GetBytes(command);
         }
 
@@ -55,7 +58,7 @@ namespace TrayScanStandard.Services
         /// </summary>
         public byte[] BuildReadParameters()
         {
-            string command = "READ\r\n";
+            string command = "$RD=9999#";
             return Encoding.ASCII.GetBytes(command);
         }
 
@@ -94,17 +97,16 @@ namespace TrayScanStandard.Services
             // 只取实际读取的部分
             string result = Encoding.ASCII.GetString(buffer, 0, bytesRead).Trim();
 
-            // 匹配格式: CH1=128 或 CH1:128
-            if (result.Contains($"CH{channel}=") || result.Contains($"CH{channel}:"))
-            {
-                string[] parts = result.Split('=', ':');
-                if (parts.Length >= 2 && int.TryParse(parts[1], out int brightness))
-                {
-                    return Math.Min(Math.Max(brightness, 0), 255);
-                }
-            }
+            // Demo返回中亮度字段格式为 L0=20,L1=20,...
+            int deviceChannel = Math.Clamp(channel - 1, 0, 3);
+            var match = Regex.Match(result, $@"\bL{deviceChannel}=(\d+)\b", RegexOptions.IgnoreCase);
+            if (!match.Success)
+                return -1;
 
-            return -1;
+            if (!int.TryParse(match.Groups[1].Value, out int brightness))
+                return -1;
+
+            return Math.Clamp(brightness, 0, 255);
         }
 
         /// <summary>

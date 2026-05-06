@@ -17,15 +17,17 @@ namespace TrayScanStandard.Models
 {
     public class WcsSaves() : SaveBase("TrayScanStandard")
     {
-        public string IP
-        {
-            get; set;
-        } = "127.0.0.1";
+        public string WcsIP{ get; set; } = string.Empty;
 
-        public string Port
-        {
-            get; set;
-        } = "50005";
+        public ushort WcsHeartPort { get; set; } = 10001;
+
+        public string PlcIp{ get; set; } = string.Empty;
+
+        public ushort WcsDataPort { get; set; } = 10002;
+
+        public string TrayScanStandardName { get; set; } = "整盘扫码";
+
+        public string SystemCode { get; set; } = string.Empty;
         public Visibility BackGroundEnable
         {
             get;
@@ -53,7 +55,8 @@ namespace TrayScanStandard.Models
 
         public CameraSetting[] ConnectAddresses { get; set; } = Enumerable.Range(0,32).Select(s => new CameraSetting()).ToArray();
 
-        public int CameraCnt { get; set; } = 1;
+        public int CameraCount { get; set; } = 2;
+        public int DecodeRetryTimes { get; set; } = 3;
 
         //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
 
@@ -66,7 +69,8 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// 工位设置 // 防止有多工位的
         /// </summary>
-        public StageSetting StageSetting { get; set; } = new();        public int SelectBatteryId { get; set; } = 0;
+        public StageSetting StageSetting { get; set; } = new();        
+        public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
         public bool CameraEnable { get; set; } = false;
         

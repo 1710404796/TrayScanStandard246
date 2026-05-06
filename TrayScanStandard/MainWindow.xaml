@@ -39,11 +39,11 @@
             </Border.Background>
         </Border>
 
-        <TextBlock VerticalAlignment="Center"
+        <TextBox VerticalAlignment="Center"
                    FontSize="20" 
-                   Text="CCD整盘扫码"
+                   Text="{Binding ViewModel.Saves.TrayScanStandardName,Mode=TwoWay}"
                    HorizontalAlignment="Center">
-        </TextBlock>
+        </TextBox>
         <!--<TextBlock Grid.Column="1"
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
@@ -59,48 +59,52 @@
                         VerticalAlignment="Center"
                         Margin="0,5,100,5"
                         Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
+            <TextBlock VerticalAlignment="Center" 
+                        FontSize="15" 
+                        Text="WCS连接状态:"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+            <TextBlock Text="{Binding ViewModel.WcsStatus}" 
+                        VerticalAlignment="Center" 
+                        FontWeight="Bold" 
+                        Foreground="{Binding ViewModel.WcsColor}" 
+                        Margin="10,0,10,0"/>
 
-            <!--<TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="15"
-                        Text="{x:Static lang:Resources.PLCStatus}"
-                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"</TextBlock>
-
-            <TextBlock
-                        Text="{Binding ViewModel.PlcStatus}"
+            <TextBlock VerticalAlignment="Center" 
+                        FontSize="15" 
+                        Text="物流线连接状态：" 
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+            <TextBlock Text="{Binding ViewModel.PlcStatus}"
                         VerticalAlignment="Center"
                         FontWeight="Bold"
                         Foreground="{Binding ViewModel.PlcColor}"
-                        Margin="10,0,0,0"
+                        Margin="10,0,10,0"/>
 
-                        ></TextBlock>-->
+
             <TextBlock VerticalAlignment="Center"
                        Margin="10,0,0,0"
-                       Text="{x:Static lang:Resources.CurrentOperator}"
+                       Text="当前操作员："
                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                       FontSize="15" >
-            </TextBlock>
-
+                       FontSize="15"/>
             <TextBlock VerticalAlignment="Center"
                        FontSize="15"
                        Margin="10,0,0,0"
                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                       Text="{Binding ViewModel.Username}">
-            </TextBlock>
+                       Text="{Binding ViewModel.Username}"/>
+
 
             <!--<Button Click="Button_Click">Test</Button>-->
             <Button Margin="10,0,20,0"
                     Command="{Binding ViewModel.SignOutCommand}"
                     Content="{x:Static lang:Resources.Logout}"
-                    VerticalAlignment="Center">
-            </Button>
+                    VerticalAlignment="Center"/>
+
 
             <ComboBox VerticalAlignment="Center"
-                      Margin="0,0,20,0"
-                      Width="100"
-                      SelectionChanged="SelectLangBox_SelectionChanged"
-                      x:Name="SelectLangBox">
-                <ComboBoxItem >中文</ComboBoxItem>
+                       Margin="0,0,20,0"
+                       Width="100"
+                       SelectionChanged="SelectLangBox_SelectionChanged"
+                       x:Name="SelectLangBox">
+                <ComboBoxItem>中文</ComboBoxItem>
                 <ComboBoxItem>English</ComboBoxItem>
                 <ComboBoxItem>Magyar nyelv</ComboBoxItem>
             </ComboBox>
@@ -137,36 +141,32 @@
                 组盘扫码日志
             </RadioButton>
 
-            <!--电芯种类管理-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="BatteryManager"
-                         Click="BatteryManager_Click"
-                         Content="{x:Static lang:Resources.ManagementOfBatteryCellTypes}">
+                         Click="BatteryManager_Click">
+                电芯种类管理
             </RadioButton>
 
-            <!--日志窗口-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="LogDash"
-                         Click="LogDash_Click"
-                         Content="{x:Static lang:Resources.LogWindow}">
+                         Click="LogDash_Click">
+                日志窗口
             </RadioButton>
 
-            <!--程序参数设定-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="Setting"
-                         Content="{x:Static lang:Resources.ParameterSettings}"
                          Click="Setting_Click">
+                程序参数设定
             </RadioButton>
 
-            <!--权限管理-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="PowerManager"
-                         Content="{x:Static lang:Resources.AccessControl}"
                          Click="PowerManager_Click">
+                权限管理
             </RadioButton>
             <!--<CheckBox 
                         HorizontalAlignment="Center" 
