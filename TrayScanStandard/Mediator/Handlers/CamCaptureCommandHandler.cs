@@ -59,11 +59,37 @@ namespace TrayScanStandard.Mediator.Handlers
                         .Map(s => s.ToEither("相机未初始化"))
                         .Traverse(s => s)
                         .Bind(c =>
-                            c
-                            //.AsParallel()    // 华睿相机并行拍照会有问题，暂时不使用
-                            .Select(ProcessCaptureInfo)
-                            .Traverse(s => s)
-                        )
+                        //    c
+                        //    //.AsParallel()    // 华睿相机并行拍照会有问题，暂时不使用
+                        //    .Select(ProcessCaptureInfo)
+                        //    .Traverse(s => s)
+                        {
+                            var captureInfos = c.ToArray();
+                            var results = new Either<string, Image2DResult[]>[captureInfos.Length];
+
+                            // 海康与其他分支沿用原逻辑：顺序执行，保持既有行为不变。
+                            captureInfos
+                                .Select((info, idx) => (info, idx))
+                                .Where(x => x.info.Camera is not HuaruiCam)
+                                .Iter(x =>
+                                {
+                                    results[x.idx] = ProcessCaptureInfo(x.info);
+                                });
+
+                            // 仅华睿分支并行拍照，再按原索引回填，避免图像槽位互换。
+                            captureInfos
+                                .Select((info, idx) => (info, idx))
+                                .Where(x => x.info.Camera is HuaruiCam)
+                                .AsParallel()
+                                .Select(x => (x.idx, result: ProcessCaptureInfo(x.info)))
+                                .ToArray()
+                                .Iter(x =>
+                                {
+                                    results[x.idx] = x.result;
+                                });
+
+                            return results.Traverse(s => s);
+                        })
                     );
 
                 return captureResult;
