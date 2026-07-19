@@ -46,6 +46,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="COM 端口" Binding="{Binding Com}" Width="*"/>
                     <DataGridTextColumn Header="光源值 (逗号分隔)" Binding="{Binding ValuesString}" Width="2*"/>
+                    <DataGridTextColumn Header="控制器类型" Binding="{Binding ControllerType}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>        <!-- 错误信息 -->
@@ -77,6 +78,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -115,19 +117,31 @@
                         </Button>
                     </Grid>
                     
-                    <!-- 光源值输入 -->
+                    <!-- 控制器类型选择 -->
                     <TextBlock Grid.Row="1" Grid.Column="0" 
+                               Text="控制器类型:" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,10,0"
+                               HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" 
+                              ItemsSource="{Binding ViewModel.AvailableControllerTypes}" 
+                              SelectedItem="{Binding ViewModel.NewControllerType}"
+                              Padding="5,5" 
+                              Margin="0,0,0,10"/>
+                    
+                    <!-- 光源值输入 -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" 
                                Text="光源值:" 
                                VerticalAlignment="Center" 
                                Margin="0,0,10,0"
                                HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" 
+                    <TextBox Grid.Row="2" Grid.Column="1" 
                              Text="{Binding ViewModel.NewValuesString, UpdateSourceTrigger=PropertyChanged}" 
                              Padding="5,5" 
                              Margin="0,0,0,10"/>
                              
                     <!-- 帮助提示 -->
-                    <TextBlock Grid.Row="1" Grid.Column="1"
+                    <TextBlock Grid.Row="2" Grid.Column="1"
                                Text="使用逗号分隔多个值 (例如: 100,120,150)" 
                                Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
                                FontSize="11" 
@@ -137,7 +151,7 @@
                                Opacity="0.7"/>
                              
                     <!-- 添加按钮 -->
-                    <Button Grid.Row="2" Grid.Column="1" 
+                    <Button Grid.Row="3" Grid.Column="1" 
                             Content="添加光源" 
                             Command="{Binding ViewModel.AddLightCommand}" 
                             Padding="15,8" 
@@ -162,6 +176,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -201,19 +216,31 @@
                         </Button>
                     </Grid>
                     
-                    <!-- 光源值编辑 -->
+                    <!-- 控制器类型编辑 -->
                     <TextBlock Grid.Row="1" Grid.Column="0" 
+                               Text="控制器类型:" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,10,0"
+                               HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" 
+                              ItemsSource="{Binding ViewModel.AvailableControllerTypes}" 
+                              SelectedItem="{Binding ViewModel.EditControllerType}"
+                              Padding="5,5" 
+                              Margin="0,0,0,10"/>
+                    
+                    <!-- 光源值编辑 -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" 
                                Text="光源值:" 
                                VerticalAlignment="Center" 
                                Margin="0,0,10,0"
                                HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" 
+                    <TextBox Grid.Row="2" Grid.Column="1" 
                              Text="{Binding ViewModel.EditValuesString, UpdateSourceTrigger=PropertyChanged}" 
                              Padding="5,5" 
                              Margin="0,0,0,10"/>
                              
                     <!-- 帮助提示 -->
-                    <TextBlock Grid.Row="1" Grid.Column="1"
+                    <TextBlock Grid.Row="2" Grid.Column="1"
                                Text="使用逗号分隔多个值 (例如: 100,120,150)" 
                                Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
                                FontSize="11" 
@@ -223,7 +250,7 @@
                                Opacity="0.7"/>
                     
                     <!-- 编辑按钮组 -->
-                    <StackPanel Grid.Row="2" Grid.Column="1" 
+                    <StackPanel Grid.Row="3" Grid.Column="1" 
                                 Orientation="Horizontal" 
                                 HorizontalAlignment="Right">
                         <Button Content="保存修改" 

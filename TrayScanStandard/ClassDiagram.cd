@@ -1,0 +1,1261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TrayScanStandard.Properties.Resources" Collapsed="true">
+    <Position X="27" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>/Efe1t9x3B396251J7hzfm6s99HvTL40/9r7eYX3zZ4=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Properties.Settings" Collapsed="true">
+    <Position X="13" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Apis.WcsController" Collapsed="true">
+    <Position X="25.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Apis\WcsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Apis.QRCodeResult" Collapsed="true">
+    <Position X="18.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Apis\WcsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Attritubes.NotShowAttribute" Collapsed="true">
+    <Position X="7.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Attritubes\NotShowAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Attritubes.PowerViewAttribute" Collapsed="true">
+    <Position X="13" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Attritubes\PowerViewAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.BatteryTypeInfo" Collapsed="true">
+    <Position X="20" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAAAAAAAAAAABAAAQAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Models\BatteryTypeInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.OKNGCnt" Collapsed="true">
+    <Position X="9.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAABAAAAAAAAICAgAAAEAAAAAAAAABA=</HashCode>
+      <FileName>Data\Models\OkNgCnt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.PalletLog" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AICCACAAAAAAAAAAAIBAAAAAQAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Models\PalletLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.BatteryInfo" Collapsed="true">
+    <Position X="9.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Data\Models\PalletLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.User" Collapsed="true">
+    <Position X="11.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACACIgQAAAAAAAAAAAAAAAAAAAAAAAIAAQAABAAAAAA=</HashCode>
+      <FileName>Data\Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.WarningLog" Collapsed="true">
+    <Position X="20" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAgAAEAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Data\Models\WarningLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.Models.WcsLog" Collapsed="true">
+    <Position X="6" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACACBAEAAABAAAAAAAAAAAAAAAACgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Models\WcsLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Data.LinxContext" Collapsed="true">
+    <Position X="11.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAQAAACIAAAAAAAAAEAAAFAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Data\LinxContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Jobs.DailyJobs" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Jobs\DailyJobs.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Jobs.HourJobs" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Jobs\HourJobs.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Behaviors.LoggingBehavior&lt;TRequest, TResponse&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAIAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Behaviors\LoggingBehavior.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.CZP.ScanPalletCodeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\CZP\ScanPalletCodeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.ApplyBatteryInfoCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAABAAAAAAAAAAAIAAAIAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\ApplyBatteryInfoCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.AskFakeCellPalletCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\AskFakeCellPalletCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.CheckMaterialOnlineCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\CheckMaterialOnlineCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.DeviceErrorCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\DeviceErrorCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.GrabActionCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAACAAAAIAIAIAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\GrabActionCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.GrabCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAIAIgAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\GrabCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.MaterialOnlineQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAABAAAAAAAAAAAAIAACAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\MaterialOnlineQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WCS.MoveFakeCellPalletCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WCS\MoveFakeCellPalletCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.AddToWarningCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\AddToWarningCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.CamCaptureCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\CamCaptureCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.CheckPowerQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\CheckPowerQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.DelectCCDCommandHander" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\DelectCCDCommandHander.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.DetectCodeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\DetectCodeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.InitMeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\InitMeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.LoginCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\LoginCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.LogOutCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\LogOutCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.OperationLogCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\OperationLogCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.PushErrorMessageCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\PushErrorMessageCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.PushImgCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\PushImgCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.RefreshUserCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\RefreshUserCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.SaveDataFrameCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACBAAAAAAAIAAAAAAQAAAAAAIAAAAAAAAACAA=</HashCode>
+      <FileName>Mediator\Handlers\SaveDataFrameCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WarningBoxCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WarningBoxCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.InformationBoxCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WarningBoxCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.PlcDataWarningBoxCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WarningBoxCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Mediator.Handlers.WcsDataWarningBoxCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Mediator\Handlers\WarningBoxCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Methods.WcsMethods" Collapsed="true">
+    <Position X="11.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Methods\WcsMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Migrations.Init" Collapsed="true">
+    <Position X="23.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20250417062619_Init.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Migrations.Initcount" Collapsed="true">
+    <Position X="25.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>Migrations\20250717074435_Initcount.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Migrations.LinxContextModelSnapshot" Collapsed="true">
+    <Position X="13" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Migrations\LinxContextModelSnapshot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.CZPallet.Pallet" Collapsed="true">
+    <Position X="3.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQBAAAAAAAA=</HashCode>
+      <FileName>Models\CZPallet\Pallet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.CZPallet.PalletTypeRule" Collapsed="true">
+    <Position X="25.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAACAAAAAAAAABAAAAQAACAAQAQAQAAAAAAAgAA=</HashCode>
+      <FileName>Models\CZPallet\PalletTypeRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.BatteryLevelHelper" Collapsed="true">
+    <Position X="11.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAIAAAAAAAAgAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Models\CZPallet\PalletChannel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.StationChannel" Collapsed="true">
+    <Position X="21.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAACBAAhBCIACACAAAAAAAAAAAAoAAAgAAA=</HashCode>
+      <FileName>Models\CZPallet\PalletChannel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.XYLStation" Collapsed="true">
+    <Position X="3.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQDIAEAALAAAEAAACBAAAAgAAAYAAAIAAAQAAADEQA=</HashCode>
+      <FileName>Models\CZPallet\XLYStation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.XYLStage" Collapsed="true">
+    <Position X="16.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAACAAAAAAFAACAAAAAAACAAAAAAEgAAgACA=</HashCode>
+      <FileName>Models\CZPallet\XYLStage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.WcsSaves" Collapsed="true">
+    <Position X="13" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SABBCQAAgAAAAAAFAAAAAQCALAAAAAAABAgEIAQAAAQ=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.ApiEnableTable" Collapsed="true">
+    <Position X="13" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAIBEBAACgAAAKAAAAABAAAAAAAAAAgAAQABAAAAAA=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.StageSetting" Collapsed="true">
+    <Position X="18.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADAACAAAAAEAAAAAAAAAAAAEAAAAQAEAAIQAAAAAAAA=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.BcrInfo" Collapsed="true">
+    <Position X="25.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAABAAAAAEAAABAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.BcrPosition" Collapsed="true">
+    <Position X="27" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAYAA=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Models.BarCodeRegionInfo" Collapsed="true">
+    <Position X="6" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAABAAAAAAAAAAAAEAAAAAIAAAACCAAAAAAAAA=</HashCode>
+      <FileName>Models\WcsSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.AskFakeCellRequest" Collapsed="true">
+    <Position X="20" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\AskFakeCellRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.AskFakeCellResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAACAAAAAAAAAAgAAAAAAAAAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\AskFakeCellRequest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.DeviceErrorRequest" Collapsed="true">
+    <Position X="14.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAAAAAAAAEAAACAAAAAAAAAAAgAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\DeviceError.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.DeviceErrorResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAAJIAAAAA=</HashCode>
+      <FileName>Service\Models\DeviceError.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.GrabActionRequest" Collapsed="true">
+    <Position X="23.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAgCAAAAAAAAEAEAAUAAAAIAEAAAAAAA=</HashCode>
+      <FileName>Service\Models\GrabAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.GrabActionResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAIIAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\GrabAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.GrabRequest" Collapsed="true">
+    <Position X="7.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAEAAAAgBAAAAAAEAAAAQAAAAIAAAAABCAA=</HashCode>
+      <FileName>Service\Models\Grap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.GrabMaterialInfo" Collapsed="true">
+    <Position X="6" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAgCAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\Grap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.GrabResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAIIAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\Grap.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialInStationRequests" Collapsed="true">
+    <Position X="7.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAACAAAAAEAAAAAAAAAAAAEAAAAQAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialInStation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialInStationResponse" Collapsed="true">
+    <Position X="9.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAACAAAAAAAAAAAAAAAIIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialInStation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialInStationReturnInfo" Collapsed="true">
+    <Position X="11.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIgCAAAAAAAAAAAAAAAAAABIAAAAAAAAQA=</HashCode>
+      <FileName>Service\Models\MaterialInStation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOfflineCheckRequest" Collapsed="true">
+    <Position X="13" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAEAAAAAAAAAAAAEAAAAQAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOfflineCheck.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOfflineCheckResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAABAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOfflineCheck.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOnlineRequest" Collapsed="true">
+    <Position X="20" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAEAAAAAAAAAAAAEAAAAQAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOnlineInfo" Collapsed="true">
+    <Position X="16.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOnlineResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAIAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOnline.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MaterialOnlineReturnInfo" Collapsed="true">
+    <Position X="23.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAgAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MaterialOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MoveFakeCellRequest" Collapsed="true">
+    <Position X="27" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAEAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\MoveFakeCellRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.MoveFakeCellResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAACAAAAAAAAAAgAAAAAAAAAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\MoveFakeCellRequest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.PostDeviceStatusRequest" Collapsed="true">
+    <Position X="7.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAAAAAAAAUAAAACAAAAAAAAAAAAQAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\PostDeviceStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.PostDeviceStatusResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAAJIAAAAA=</HashCode>
+      <FileName>Service\Models\PostDeviceStatus.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.QueryAssembleInfoRequest" Collapsed="true">
+    <Position X="20" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAACAAAAAAAAAAAAAQAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\QueryAssembleInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.QueryAssembleInfoResponse" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAgAAAAAIBAAAAAgIAAAAAAggAAAAAIYAAJAAAAAA=</HashCode>
+      <FileName>Service\Models\QueryAssembleInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.AssembleMaterialInfo" Collapsed="true">
+    <Position X="23.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAABAAAAoAAAAAAAACgAAAABAQAAgEAAAAA=</HashCode>
+      <FileName>Service\Models\QueryAssembleInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.UploadDeviceErrorRequest" Collapsed="true">
+    <Position X="27" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQACAAEAAAAAAAAAEAAgAAAARAAAAIAAAAIABAA=</HashCode>
+      <FileName>Service\Models\UploadDeviceErrorRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.UploadDeviceErrorResponse" Collapsed="true">
+    <Position X="6" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAIAAAAIAAAAACA=</HashCode>
+      <FileName>Service\Models\UploadDeviceErrorResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.UploadDeviceStatusRequest" Collapsed="true">
+    <Position X="7.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQACAAEAAAAAAAAAAAAAAAAARACAIIAAAAAAAAA=</HashCode>
+      <FileName>Service\Models\UploadDeviceStatusRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.Models.UploadDeviceStatusResponse" Collapsed="true">
+    <Position X="9.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAIAAAAIAAAAACA=</HashCode>
+      <FileName>Service\Models\UploadDeviceStatusResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.BatteryCacheService" Collapsed="true">
+    <Position X="7.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAEAAAAAAAAAAAACAAAAABAAAAA=</HashCode>
+      <FileName>Service\BatteryCacheService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.ScanCameraService" Collapsed="true">
+    <Position X="9.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAEAAAAgAAACACAAAAAAAAAADAQAAAAA=</HashCode>
+      <FileName>Service\ScanCameraService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.WcsService" Collapsed="true">
+    <Position X="14.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACABAADAAQAAAAgAOABCAACEAABAgAAAEAAgAAAA=</HashCode>
+      <FileName>Service\WcsService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Service.XYLZPService" Collapsed="true">
+    <Position X="18.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAACAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Service\XYLZPService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Utils.CZPUtils" Collapsed="true">
+    <Position X="23.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAIAAIIIIIAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Utils\CZPUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Utils.DetectUtil" Collapsed="true">
+    <Position X="11.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAEAAAAAAAAAAAAAACAAIAAAAAAAAAABhAAAAAAAA=</HashCode>
+      <FileName>Utils\DetectUtil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Utils.LoginHelper" Collapsed="true">
+    <Position X="21.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAABAAAAgAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Utils\LoginHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.Utils.Utils" Collapsed="true">
+    <Position X="16.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Utils\Utils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.BatteryRuleControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAASAEAAAAIAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\BatteryRuleControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.BatteryRuleEdit" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAgAAAEACAiAAAIAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\BatteryRuleEdit.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.ChannelModify" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAgCAAABAEgAACAAAAkAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>View\CZPallet\ChannelModify.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.CreateBatteryRule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAUAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\CreateBatteryRule.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.CreatePalletRule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAEAAAACAAAAAAUAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\CreatePalletRule.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.GongWeiView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAEAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\GongWeiView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletChaiLogView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAEQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletChaiLogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletDetailWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletDetailWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletLogView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAEQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletLogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletRuleControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAIAAAAACAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletRuleControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletRuleEditView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAgEAAEAAAgABAIAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletRuleEditView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.PalletView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAQQCCEAgIAEAAAAABAIACAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\PalletView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.StationDetail" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAACAECggAEAAAAAFgAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>View\CZPallet\StationDetail.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.StationSettingView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAGAAAAAAAAAACAAAEBgAAIkQAAAAACAACAAAA=</HashCode>
+      <FileName>View\CZPallet\StationSettingView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CZPallet.YWStageView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAASAEAAAAAAAAAABAAAAkCAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\YMStageView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.WarningLogView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>View\CZPallet\WarningLogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.WCSLogView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAECAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CZPallet\WCSLogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.PalletLogExt" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\CZPallet\PalletChaiLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.PalletChaiLogViewModel" Collapsed="true">
+    <Position X="14.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAACAAAgBAAAIAAgAEAAAAAAAAIgAAA=</HashCode>
+      <FileName>ViewModel\CZPallet\PalletChaiLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.PalletLogViewModel" Collapsed="true">
+    <Position X="20" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAACBAAgBAAAIAAgAEAAAAAAIAIgAAA=</HashCode>
+      <FileName>ViewModel\CZPallet\PalletLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.WarningLogViewModel" Collapsed="true">
+    <Position X="23.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAACAAAAAAAAIAAgAEAAAAAAAAIgAAA=</HashCode>
+      <FileName>ViewModel\CZPallet\WarningLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.CZPallet.WCSLogViewModel" Collapsed="true">
+    <Position X="9.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAACAAAAAAAAIAAgQEAAAAAEQAIgAgA=</HashCode>
+      <FileName>ViewModel\CZPallet\WCSViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.View.User.AddUser" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIgQAAAAAAAAAAIAAACEAAAAAAAAAAQAAIAAAAAA=</HashCode>
+      <FileName>View\User\AddUser.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.User.PowerSettingWindows" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAABAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>View\User\PowerSettingWindows.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.AllBcrListView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAIAAAADBAAKwkCAAkMBEAAAQIAggIAAAAAAAAFEAA=</HashCode>
+      <FileName>View\AllBcrListView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.AutoClassEditWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>View\AutoClassEditWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.AutoFormGeneratorControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAEAAIACAAAAAgAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>View\AutoFormGeneratorControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.ClassField" Collapsed="true">
+    <Position X="18.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>View\AutoFormGeneratorControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.View.BatteryManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAgAAAAAIAEAAAQIAAAAAAAAAAoAA=</HashCode>
+      <FileName>View\BatteryManager.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.BcrBorder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAACAAAAAAAAAAAAEAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\BcrBorder.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.BcrSettingWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAQAAAAAAAABAAAQAAAAAAAAAAAgIAAAAAABAQAA=</HashCode>
+      <FileName>View\BcrSettingWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.Busying" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICAEAAAAAAAAAAAAAABAAgAAAAUAACAAAAA=</HashCode>
+      <FileName>View\Busying.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.CameraManagerView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\CameraManagerView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.DataDisplayView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAEAEQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\DataDisplayView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.Image2DView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABoBIAhICAAFIACEQAEQABAEBWAAAAgACAAAAERBSA=</HashCode>
+      <FileName>View\Image2DView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.ImageDisplayView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAKAAAgAAAAAAAAEBAAAAAAAAAAAAAAAwA=</HashCode>
+      <FileName>View\ImageDisplayView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.LightManagerView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\LightManagerView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.LockScreenView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAQAAAABIAAgAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>View\LockScreenView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.LogDashBoardView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\LogDashBoardView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.ResizeAbleImage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAoAAEAiACAAAAAAAAAAAIgAAAQAAAAAAAAA=</HashCode>
+      <FileName>View\ResizeAbleImage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.RFIDInput" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAQAAAAAAAAAAAAAAAgAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\RFIDInput.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.SettingView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>View\SettingView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.View.UserManagerView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAQAABAAAAQAAAABEAAAAAQAAAAAAQAAABA=</HashCode>
+      <FileName>View\UserManagerView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.BatteryManagerViewModel" Collapsed="true">
+    <Position X="14.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgBAgAABAAAAAAAAIAAKAAAQAAAgAAAAAAABAA=</HashCode>
+      <FileName>ViewModel\BatteryManagerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.BcrBorderViewModel" Collapsed="true">
+    <Position X="23.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAAAAAAAAAAIAgCAAAAIAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\BcrBorderViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.DataDisplayViewModel" Collapsed="true">
+    <Position X="6" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAAAAAACAAAAAAAAIAAgCEAAAAAAAEIgCBA=</HashCode>
+      <FileName>ViewModel\DataDisplayViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.Image2DViewModel" Collapsed="true">
+    <Position X="16.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQVEBAAAFAAKAgKAJACAAdIJBAgQAoAQBCIhQAAIgA=</HashCode>
+      <FileName>ViewModel\Image2DViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.ImageDisplayViewModel" Collapsed="true">
+    <Position X="20" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAgAABABAAAgAAAAAAAAAAIAAAgACAQAAAAAgA=</HashCode>
+      <FileName>ViewModel\ImageDisplayViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.LightManagerViewModel" Collapsed="true">
+    <Position X="9.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBgEAIAAAgAAIAAAAAAAkQAEAAAIEAAAAiAAAAAAgAA=</HashCode>
+      <FileName>ViewModel\LightManagerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.LightInfoViewModel" Collapsed="true">
+    <Position X="6" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAEAAAAAAAIAAAAAAABAAAAAAAAACA=</HashCode>
+      <FileName>ViewModel\LightManagerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.MainViewModel" Collapsed="true">
+    <Position X="27" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAACBAAAIAAAAAAQBABAwACkBACAAAQgIQCEAEAAI=</HashCode>
+      <FileName>ViewModel\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.SettingViewModel" Collapsed="true">
+    <Position X="16.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAACAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\SettingViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.UserManagerViewModel" Collapsed="true">
+    <Position X="14.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\UserManagerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.ViewModel.AdvUser" Collapsed="true">
+    <Position X="9.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAgAAAAAAAAAAAAAQAAEAAAAAA=</HashCode>
+      <FileName>ViewModel\UserManagerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.App" Collapsed="true">
+    <Position X="14.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAEAAAQCAAAAABAAAAAAEE=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.FormGenerator" Collapsed="true">
+    <Position X="18.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FormGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.MainStorage" Collapsed="true">
+    <Position X="25.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAIAABAIAAAAAAQQAABACAAACEAA=</HashCode>
+      <FileName>MainStorage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AggAAAAAAAAIAAgAABAAQkgCUICBAACAAAAAAABAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TrayScanStandard.Startup" Collapsed="true">
+    <Position X="20" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrayScanStandard.HomeController" Collapsed="true">
+    <Position X="11.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="TrayScanStandard.Service.Models.IWcsResponse" Collapsed="true">
+    <Position X="7.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Service\Models\IWcsResponse.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TrayScanStandard.Service.Models.ILinxResponse" Collapsed="true">
+    <Position X="6" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Service\Models\IWcsResponse.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="TrayScanStandard.Apis.ErrorType" Collapsed="true">
+    <Position X="11.25" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Apis\WcsController.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Attritubes.PowerEnum" Collapsed="true">
+    <Position X="16.5" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAABAAAQABAAAIAAAAAIAAECAAAEAAAEAAAAAAAA=</HashCode>
+      <FileName>Attritubes\PowerEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Attritubes.RoleEnum" Collapsed="true">
+    <Position X="20" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAABAAAAAAQAgAAAAAAAAgAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Attritubes\PowerEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Data.Models.PowerType" Collapsed="true">
+    <Position X="18.25" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAgAAAAAAAAQAAQA=</HashCode>
+      <FileName>Data\Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Data.Models.State" Collapsed="true">
+    <Position X="21.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Data\Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Data.Models.WarningType" Collapsed="true">
+    <Position X="23.5" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\Models\WarningLog.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Models.CZPallet.PalletType" Collapsed="true">
+    <Position X="13" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAEAAAAAAAAAABQAAAQAAAAAAAA=</HashCode>
+      <FileName>Models\CZPallet\Pallet.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Models.BatteryLevel" Collapsed="true">
+    <Position X="7.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAgAAAAAAAAAAAAAAAABAACEAAAAAAAAAAFABGAABA=</HashCode>
+      <FileName>Models\CZPallet\PalletChannel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Service.Models.ActionType" Collapsed="true">
+    <Position X="6" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgIAAAAAAAAAAAAIAAAAIAAAAA=</HashCode>
+      <FileName>Service\Models\GrabAction.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Service.Models.PostDeviceStatusType" Collapsed="true">
+    <Position X="14.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQCAAAAAAAgAAAAAAAAAAAAAAAIAAAAEAAAAAAA=</HashCode>
+      <FileName>Service\Models\PostDeviceStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TrayScanStandard.Service.Models.DeviceTypeEnum" Collapsed="true">
+    <Position X="9.5" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAABAIAAAAAQAAAAAAAAIAIAAAAAAAA=</HashCode>
+      <FileName>Service\Models\PostDeviceStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

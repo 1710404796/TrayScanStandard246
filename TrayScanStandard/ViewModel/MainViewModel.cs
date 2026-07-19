@@ -54,12 +54,18 @@ namespace TrayScanStandard.ViewModel
         [RelayCommand]
         public async Task SignOut()
         {
-            Logger.LogInformation("{username} 登出", Username);
+            Logger.LogInformation($"{Username} 登出");
 
             // _authenticationStateProvider.
             await Mediator.Send(new LogOutCommand());
         }
+        public string WcsStatus => WcsIsRunning ? Properties.Resources.Online : Properties.Resources.Offline;
+        public SolidColorBrush WcsColor => WcsIsRunning ? Brushes.Green : Brushes.Red;
 
+        [NotifyPropertyChangedFor(nameof(WcsStatus))]
+        [NotifyPropertyChangedFor(nameof(WcsColor))]
+        [ObservableProperty]
+        private bool _wcsIsRunning = false;
 
         public string PlcStatus => PlcIsRunning ? Properties.Resources.Run : Properties.Resources.Stop;
         public SolidColorBrush PlcColor => PlcIsRunning ? Brushes.Green : Brushes.Red;
@@ -96,7 +102,7 @@ namespace TrayScanStandard.ViewModel
                     IsLock = user.Identity.IsAuthenticated ? Visibility.Collapsed : Visibility.Visible;
                     if (user.Identity.IsAuthenticated)
                         Username = $"{user.GetUserName()}({user.GetUserRole()})";
-                    logger.LogInformation("{username} 登陆", Username);
+                    logger.LogInformation($"{Username} 登录");
                     // 输出切换后用户名称
                     // Console.WriteLine(IsLock);
 
@@ -127,7 +133,7 @@ namespace TrayScanStandard.ViewModel
         }
 
         /// <summary>
-        /// Cleanup method to stop background thread and prevent memory leaks
+        /// 用于停止后台线程并防止内存泄漏的清理方法
         /// </summary>
         public void Cleanup()
         {
@@ -139,7 +145,7 @@ namespace TrayScanStandard.ViewModel
                 if (!_someThread.Join(TimeSpan.FromSeconds(2)))
                 {
                     // Log warning if thread doesn't stop gracefully
-                    Logger?.LogWarning("Background thread did not stop gracefully within timeout");
+                    Logger?.LogWarning("后台线程在超时后未正常终止");
                 }
             }
 

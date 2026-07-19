@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using Humanizer;
 using LinxUniverse.Auth;
 using MediatR;
+using System.Windows;
 using TrayScanStandard;
+using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Queries;
 
 
@@ -15,17 +17,21 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task<bool> Handle(CheckPowerQuery request, CancellationToken cancellationToken)
         {
-            //var aa = LoginHelper.GetPowerId((await authenticationStateProvider.GetAuthenticationStateAsync()).User.GetUserRole()) - 1;
-            //if (aa == 5 || (MainStorage.Saves.PowerTable.ContainsKey(request.PowerEnum) && 
-            //                MainStorage.Saves.PowerTable[request.PowerEnum][aa]))
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return true;
+            string aa = (await authenticationStateProvider.GetAuthenticationStateAsync()).User.GetUserRole();
+
+            if (aa == "admin") return true;
+
+            RoleEnum roleEnum = aa.DehumanizeTo<RoleEnum>();
+
+            if (roleEnum == RoleEnum.SuperAdmin || (MainStorage.Saves.PowerTable.ContainsKey(request.PowerEnum) &&
+                MainStorage.Saves.PowerTable[request.PowerEnum][roleEnum]))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

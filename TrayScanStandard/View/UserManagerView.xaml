@@ -11,34 +11,62 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Name="AddUser" Click="AddUser_Click" Margin="10">添加用户</Button>
-            <Button Name="DelUser" Click="DelUser_Click" Margin="10">删除用户</Button>
-            <!--<Button Name="EditUser" Click="EditUser_Click" Margin="10">删除用户</Button>-->
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Width="120" VerticalAlignment="Center" Margin="205,10,5,10" Foreground="Black">用户名：</TextBlock>
-            <TextBox x:Name="UserInfo" Height="30" Width="100" Margin="5,10,10,10"></TextBox>
-            <Button x:Name="Select"
-                Content="{x:Static lang:Resources.Query}" Width="150"
-                Click="Select_Click"></Button>
-            <!--<Button Click="Button_Click">踢啊</Button>-->
-        </StackPanel>
+
+        <!-- 工具栏 -->
+        <Border Grid.Row="0" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+             BorderThickness="0,0,0,1" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 左侧：管理操作 -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button Name="AddUser" Click="AddUser_Click" Margin="0,0,5,0">添加用户</Button>
+                    <Button Name="DelUser" Click="DelUser_Click" Margin="0,0,5,0">删除用户</Button>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="5,2"/>
+                    <TextBlock VerticalAlignment="Center" Margin="5,0,3,0" Foreground="Black">导入角色：</TextBlock>
+
+                    <ComboBox ItemsSource="{Binding ViewModel.RoleList}"
+                           SelectedItem="{Binding ViewModel.SelectedRole, Mode=TwoWay}"
+                           Width="110" Margin="0,0,5,0"
+                           VerticalAlignment="Center"/>
+
+                    <Button Content="导入" Margin="5,0,0,0" Command="{Binding ViewModel.ImportCsvCommand}"/>
+                </StackPanel>
+
+                <!-- 右侧：搜索 -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,5,0"
+                            Foreground="Black">用户名：</TextBlock>
+                    <TextBox x:Name="UserInfo" Height="26" Width="120"
+                          VerticalContentAlignment="Center"/>
+
+                    <Button x:Name="Select" Width="60" Margin="5,0,0,0"
+                         Content="{x:Static lang:Resources.Query}"
+                         Click="Select_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 数据表格 -->
         <ScrollViewer Grid.Row="1" Loaded="ScrollViewer_Loaded" >
-            <DataGrid   
-        Name="ddShow"
-        AutoGenerateColumns="False" 
-        CanUserAddRows="False" 
-         IsReadOnly="True"
-        RowHeaderWidth="0"
-        ColumnWidth="*" 
-      ItemsSource="{Binding ViewModel.Users}"
-        RowEditEnding="ddShow_RowEditEnding"
-        LoadingRow="ddShow_LoadingRow"
-        HeadersVisibility ="Column">
+            <DataGrid 
+                Name="ddShow"
+                AutoGenerateColumns="False" 
+                CanUserAddRows="False" 
+                IsReadOnly="True"
+                RowHeaderWidth="0"
+                ColumnWidth="*" 
+                ItemsSource="{Binding ViewModel.Users}"
+                RowEditEnding="ddShow_RowEditEnding"
+                LoadingRow="ddShow_LoadingRow"
+                HeadersVisibility ="Column">   
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{x:Static lang:Resources.Username}" Width="150"  Binding="{Binding LinxUser.UserName, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>

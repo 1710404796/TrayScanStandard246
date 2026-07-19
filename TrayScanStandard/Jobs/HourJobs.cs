@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Quartz;
+using TrayScanStandard.ViewModel;
 
 namespace TrayScanStandard.Jobs
 {
-    internal class HourJobs() : IJob
+    internal class HourJobs(MainViewModel mainViewModel) : IJob
     {
         /// <summary>
         /// 每日执行任务
@@ -20,25 +21,44 @@ namespace TrayScanStandard.Jobs
             Console.WriteLine("11111111111111");
 
 
+            //检查WCS是否启用
+            if (!mainViewModel.IsWcsEnable) return Task.CompletedTask;
+
             var files = new DirectoryInfo("Data2D").GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
 
-            
-
-            foreach (var file in files.Skip(500))
+            for (int i = 0; i < files.Length; i++)
             {
-                File.Delete(file.FullName);
+                var file = files[i];
 
-            }
-            foreach (var file in files.Take(500))
-            {
-                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay))
+                // 超过保留天数
+                bool isTooOld = DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay);
+
+                // 排名500以后
+                bool isBeyondCountLimit = i >= 500;
+
+                // 满足任一条件就删除
+                if (isTooOld || isBeyondCountLimit)
                 {
                     File.Delete(file.FullName);
                 }
             }
 
 
-           var dirs = new DirectoryInfo("DataFrame").GetDirectories().OrderByDescending(s => s.CreationTime).ToArray();
+            //foreach (var file in files.Skip(50))
+            //{
+            //    File.Delete(file.FullName);
+
+            //}
+            //foreach (var file in files.Take(50))
+            //{
+            //    if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay))
+            //    {
+            //        File.Delete(file.FullName);
+            //    }
+            //}
+
+
+            var dirs = new DirectoryInfo("DataFrame").GetDirectories().OrderByDescending(s => s.CreationTime).ToArray();
             foreach (var dir in dirs.Skip(500))
             {
              

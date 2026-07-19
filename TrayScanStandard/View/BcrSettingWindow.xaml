@@ -33,6 +33,7 @@
                     SelectionChanged="CameraType_SelectionChanged"
                     >
                     <ComboBoxItem Content="HikVision"/>
+                    <ComboBoxItem Content="Huarui"/>
                     <!-- Add other camera types here -->
                 </ComboBox>
             </StackPanel>

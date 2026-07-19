@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using LinxUniverse.Utils;
@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using MugenCodeDetecter;
 using VMWebAIClient;
 using System.Windows.Threading;
+using TrayScanStandard.Utils;
 
 
 namespace TrayScanStandard.ViewModel
@@ -79,12 +80,12 @@ namespace TrayScanStandard.ViewModel
         public int DebugExpoure
         {
             get; set;
-        } = 5000;
+        } = 2000;
 
         [ObservableProperty]
         int _roiPadding = 100;
 
-        public int CameraIdx { get; set; } = 0;
+        public int CameraIdx { get; set; } = 1;
 
         public CameraSetting CameraSetting
         {
@@ -99,10 +100,10 @@ namespace TrayScanStandard.ViewModel
 
         // 批量配置边框尺寸的属性
         [ObservableProperty]
-        private int _batchWidth = 600;
+        private int _batchWidth = 200;
 
         [ObservableProperty]
-        private int _batchHeight = 600;
+        private int _batchHeight = 200;
 
         // 跟踪是否有未保存的修改
         [ObservableProperty]
@@ -179,16 +180,20 @@ namespace TrayScanStandard.ViewModel
 
             if (SelectBattery == null)
             {
+                _logger.LogWarning("调试扫码失败：未选择托盘类型");
                 MessageBox.Show("未选择托盘类型");
                 return;
             }
 
             if (Cts != null && !Cts.IsCancellationRequested)
             {
+                _logger.LogInformation("调试扫码已停止");
                 Cts.Cancel();
             }
             else
             {
+                _logger.LogInformation("调试扫码已启动：电池={Battery}，相机={CameraIdx}",
+                    SelectBattery.TypeName, CameraIdx);
                 Cts = new();
 
                 while (!Cts.Token.IsCancellationRequested)
@@ -213,35 +218,76 @@ namespace TrayScanStandard.ViewModel
         [RelayCommand]
         public async Task Detect()
         {
-            var data = await _mediator.Send(new DetectCodeCommand([new ROIDetectParam(tempImg, 
-                SelectBattery?.Regions[CameraIdx - 1]
-                .Map(s => s.ToROI())
-                .ToArray() ?? [])])
-                );
-            data.Match(
-                Right: r =>
+            try
+            {
+                if (SelectBattery == null)
                 {
-                    // 绘制到图上？
-
-                    _logger.LogInformation(r.ToArr().ToString());
-
-
-                },
-                Left: l =>
-                {
-                    _mediator.Send (new WarningBoxCommand(l)).Wait();
-
-                },
-                Bottom: () => 
-                {
-                    _mediator.Send(new WarningBoxCommand("Detect failed")).Wait();
-                    _logger.LogError("Detect failed");
+                    _logger.LogWarning("检测失败：未选择电池类型");
+                    await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
+                    return;
                 }
-                );
-            // 理论上 一定会有结果
-            TempResult = data.ToOption().Map(s => s.First());
-            UpdateResult();
-            Update();
+
+                if (CameraIdx <= 0 || CameraIdx - 1 >= SelectBattery.Regions.Count)
+                {
+                    _logger.LogWarning("检测失败：相机索引 {CameraIdx} 超出范围", CameraIdx);
+                    await _mediator.Send(new WarningBoxCommand($"相机索引 {CameraIdx} 超出电池类型区域配置范围"));
+                    return;
+                }
+
+                if (tempImg == null || tempImg.Length == 0)
+                {
+                    _logger.LogWarning("检测失败：未拍摄图片");
+                    await _mediator.Send(new WarningBoxCommand("请先拍摄图片再执行检测"));
+                    return;
+                }
+
+                _logger.LogInformation("单相机检测开始：电池={Battery}，相机={CameraIdx}，ROI数={RoiCount}",
+                    SelectBattery.TypeName, CameraIdx, SelectBattery.Regions[CameraIdx - 1].Count);
+
+                var rois = SelectBattery.Regions[CameraIdx - 1]
+                    .Map(s => s.ToROI())
+                    .ToArray();
+
+                var data = await _mediator.Send(new DetectCodeCommand([new ROIDetectParam(tempImg, rois)]));
+
+                await data.Match(
+                    Right: async r =>
+                    {
+                        _logger.LogInformation("单相机检测完成：结果数={Count}", r.Length);
+                        _logger.LogInformation(r.ToArr().ToString());
+                    },
+                    Left: async l =>
+                    {
+                        _logger.LogError("单相机检测失败：{Error}", l);
+                        await _mediator.Send(new WarningBoxCommand(l));
+                    },
+                    Bottom: async () =>
+                    {
+                        _logger.LogError("单相机检测失败");
+                        await _mediator.Send(new WarningBoxCommand("检测失败"));
+                    });
+
+                TempResult = data.ToOption().Bind(s =>
+                    s.Length > 0 ? Option<CodeDetectResult>.Some(s.First()) : Option<CodeDetectResult>.None);
+
+                RoiOverlayImageWriter.WriteFailedRois(
+                    ResultImg,
+                    tempImg,
+                    rois,
+                    TempResult.Match(
+                        Some: result => result.Codes.AsEnumerable(),
+                        None: () => Enumerable.Empty<CodeInfo>()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "检测异常");
+                await _mediator.Send(new WarningBoxCommand($"检测异常: {ex.Message}"));
+            }
+            finally
+            {
+                UpdateResult();
+                Update();
+            }
         }
         public byte[] tempImg = [];
         private Option<CodeDetectResult> _tempResult = None;
@@ -286,10 +332,18 @@ namespace TrayScanStandard.ViewModel
             {
                 sorted.AddRange(col.OrderBy(r => r.Top));
             }
-            // 重新编号ChannelIdx，从1开始
-            for (int i = 0; i < sorted.Count; i++)
+            // 保留原有 ChannelIdx，仅按位置排序。
+            // 托盘为多列布局时 ChannelIdx 由算法指定或手动配置，不应简单重排为1..N。
+            // 检测重复 ChannelIdx 并给出警告。
+            var duplicateIndices = sorted
+                .GroupBy(r => r.ChannelIdx)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToArray();
+            if (duplicateIndices.Length > 0)
             {
-                sorted[i].ChannelIdx = i + 1;
+                System.Diagnostics.Debug.WriteLine(
+                    $"[AutoSortROI] 警告: 检测到重复的 ChannelIdx: [{string.Join(", ", duplicateIndices)}]，请手动修正。");
             }
             SelectBattery.Regions[CameraIdx - 1] = sorted;
             LinxContext.SaveChanges();
@@ -332,10 +386,21 @@ namespace TrayScanStandard.ViewModel
         [RelayCommand]
         public async Task Capture()
         {
+            // 应用调试曝光值到相机设置
+            if (CameraSetting.Exposure == null || CameraSetting.Exposure.Length == 0)
+            {
+                CameraSetting.Exposure = [DebugExpoure];
+            }
+            else
+            {
+                CameraSetting.Exposure[0] = DebugExpoure;
+            }
+            _logger.LogInformation("相机拍照开始：相机={CameraIdx}，曝光={Exposure}",
+                CameraIdx, CameraSetting.Exposure);
+
             var data = await _mediator.Send(new CamCaptureCommand(
                 [
-                    //Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
-                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, [DebugExpoure]))
+                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
                 ] 
                 ));
 
@@ -344,17 +409,19 @@ namespace TrayScanStandard.ViewModel
                 Right: r =>
                 {
                     var img = tempImg  = r.First().First().Data; // 对结果要验证一下 加个验证器
-                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.png";
+                    var name = Path.Combine(FilenameHelper.AppPath, "Data2D", $"single-{CameraIdx}-{FilenameHelper.FileName}.png");
                     File.WriteAllBytes(name, img);
-                    ResultImg = FilenameHelper.AppPath + "/" + name;
+                    ResultImg = name;
+                    _logger.LogInformation("相机拍照完成：相机={CameraIdx}，保存路径={Path}", CameraIdx, name);
                 },
                 Left: l =>
                 {
-
+                    _logger.LogError("相机拍照失败：相机={CameraIdx}，错误={Error}", CameraIdx, l);
                 }
 
                 );
 
+            #region
             //if (SelectBattery == null)
             //{
             //    MessageBox.Show("未选择托盘类型");
@@ -437,13 +504,14 @@ namespace TrayScanStandard.ViewModel
             //}
 
             // 撕烤一下更新
-
+            #endregion
             Update();
         }
 
         public void DrawAImage()
         {
 
+            #region
             //if (SelectBattery == null)
             //{
             //    MessageBox.Show("未选择托盘类型");
@@ -470,6 +538,7 @@ namespace TrayScanStandard.ViewModel
 
             //}
             //nImage.Save(ResultImg.Replace(".jpg", "-Result.jpg"));
+            #endregion
         }
     }
 }

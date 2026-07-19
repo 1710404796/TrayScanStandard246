@@ -56,6 +56,37 @@ namespace TrayScanStandard.View
         /// <param name="e"></param>
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
+            var button = sender as Button;
+            if (button != null)
+            {
+                button.IsEnabled = false;
+            }
+
+            try
+            {
+                var imageVm = ViewModel.Image2DViewModel;
+                int cameraIdx = imageVm.CameraIdx;
+
+                var result = imageVm.Service.ReconnectCamera(cameraIdx);
+                result.Match(
+                    Right: _ =>
+                    {
+                        MessageBox.Show($"相机{cameraIdx}重连成功");
+                        return 0;
+                    },
+                    Left: error =>
+                    {
+                        MessageBox.Show($"相机{cameraIdx}重连失败: {error}");
+                        return 0;
+                    });
+            }
+            finally
+            {
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
+            }
         }
 
         public void Dispose()

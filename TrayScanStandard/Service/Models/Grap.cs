@@ -97,7 +97,7 @@ namespace TrayScanStandard.Service.Models
         /// </summary>
         [Required]
         [JsonPropertyName("responseCode")]
-        public string ResponseCode { get; set; }
+        public int ResponseCode { get; set; }
         /// <summary>
         /// 请求结果描述
         /// responseCode != 0时可填入异常描述信息
@@ -112,7 +112,7 @@ namespace TrayScanStandard.Service.Models
 
         public static GrabResponse DebugDefault => new()
         {
-            ResponseCode = "0",
+            ResponseCode = 0,
             ResponseMessage = "Success",
             Parameters = new()
             {
@@ -120,7 +120,7 @@ namespace TrayScanStandard.Service.Models
             }
         };
 
-        public bool Success => ResponseCode == "0";
+        public bool Success => ResponseCode == 0;     
 
         public string? Message => ResponseMessage;
     }

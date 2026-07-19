@@ -14,5 +14,5 @@ namespace TrayScanStandard.Mediator.Commands
         Arr<CodeInfo> Channels
         //, string[] Imgs
         );
-    public record DelectCCDCommand(BatteryTypeInfo? BatteryTypeInfo): IRequest<Either<string, DetectResult>>;
+    public record DetectCCDCommand(BatteryTypeInfo? BatteryTypeInfo): IRequest<Either<string, DetectResult>>;
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +15,7 @@ namespace TrayScanStandard.View
         private Point _lastPosition;
 
         public Canvas BorderCanvas => borderCanvas;
-        
+
         public ImageSource Source
         {
             get { return (ImageSource)GetValue(SourceProperty); }
@@ -31,7 +31,7 @@ namespace TrayScanStandard.View
             var control = (ResizeAbleImage)d;
             control.img.Source = (ImageSource)e.NewValue;
         }
-        
+
         public ResizeAbleImage()
         {
             InitializeComponent();
@@ -39,23 +39,30 @@ namespace TrayScanStandard.View
             GTran.ScaleY = 0.5;
         }
 
+        /// <summary>
+        /// 放大缩小
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (e.MiddleButton == MouseButtonState.Pressed || ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+            if (e.Delta > 0)
             {
-                if (e.Delta > 0)
-                {
-                    GTran.ScaleX *= 1.05;
-                    GTran.ScaleY *= 1.05;
-                }
-                else
-                {
-                    GTran.ScaleX /= 1.05;
-                    GTran.ScaleY /= 1.05;
-                }
+                GTran.ScaleX *= 1.05;
+                GTran.ScaleY *= 1.05;
+            }
+            else
+            {
+                GTran.ScaleX /= 1.05;
+                GTran.ScaleY /= 1.05;
             }
         }
 
+        /// <summary>
+        /// 鼠标右键按下
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             var grid = sender as Grid;
@@ -68,6 +75,11 @@ namespace TrayScanStandard.View
             }
         }
 
+        /// <summary>
+        /// 鼠标右键松开
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             var grid = sender as Grid;
@@ -79,6 +91,11 @@ namespace TrayScanStandard.View
             }
         }
 
+        /// <summary>
+        /// 鼠标移动
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             if (_isDragging && e.RightButton == MouseButtonState.Pressed)
@@ -88,7 +105,6 @@ namespace TrayScanStandard.View
                 var deltaY = currentPosition.Y - _lastPosition.Y;
 
                 // 根据当前缩放比例调整拖动速度
-                // 缩放越大，拖动的实际移动距离需要除以缩放比例以保持一致的手感
                 deltaX /= GTran.ScaleX;
                 deltaY /= GTran.ScaleY;
 
@@ -97,7 +113,6 @@ namespace TrayScanStandard.View
                 if (transform == null)
                 {
                     transform = new TransformGroup();
-                    // 保留原有的旋转变换
                     var rotateTransform = new RotateTransform();
                     transform.Children.Add(rotateTransform);
                     BImage.RenderTransform = transform;

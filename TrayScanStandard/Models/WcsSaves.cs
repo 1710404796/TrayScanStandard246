@@ -1,4 +1,4 @@
-﻿using Camera.Fs.Common;
+using Camera.Fs.Common;
 using LanguageExt;
 using LinxUniverse.Algo.Common;
 using LinxUniverse.Utils;
@@ -17,15 +17,57 @@ namespace TrayScanStandard.Models
 {
     public class WcsSaves() : SaveBase("TrayScanStandard")
     {
-        public string IP
-        {
-            get; set;
-        } = "127.0.0.1";
+        public string WcsIP{ get; set; } = string.Empty;
 
-        public string Port
-        {
-            get; set;
-        } = "50005";
+        public ushort WcsHeartPort { get; set; } = 10001;
+
+        public string PlcIp{ get; set; } = string.Empty;
+
+        /// <summary>
+        /// 物流线 Modbus TCP 端口
+        /// </summary>
+        public ushort ModbusTcpPort { get; set; } = 502;
+
+        /// <summary>
+        /// 物流线 Modbus 站号
+        /// </summary>
+        public byte ModbusUnitId { get; set; } = 1;
+
+        /// <summary>
+        /// 物流线触发寄存器，默认 mw300
+        /// </summary>
+        public ushort ModbusTriggerRegisterAddress { get; set; } = 300;
+
+        /// <summary>
+        /// 物流线结果反馈寄存器，默认 mw301
+        /// </summary>
+        public ushort ModbusResultRegisterAddress { get; set; } = 301;
+
+        /// <summary>
+        /// 托盘到位触发值，默认 1
+        /// </summary>
+        public ushort ModbusTriggerValue { get; set; } = 1;
+
+        /// <summary>
+        /// 扫码任务开始前的清零值
+        /// </summary>
+        public ushort ModbusResultResetValue { get; set; } = 0;
+
+        /// <summary>
+        /// WCS 提交成功反馈值
+        /// </summary>
+        public ushort ModbusResultOkValue { get; set; } = 1;
+
+        /// <summary>
+        /// WCS 提交失败反馈值
+        /// </summary>
+        public ushort ModbusResultNgValue { get; set; } = 2;
+
+        public ushort WcsDataPort { get; set; } = 10000;
+
+        public string TrayScanStandardName { get; set; } = "整盘扫码";
+
+        public string SystemCode { get; set; } = string.Empty;
         public Visibility BackGroundEnable
         {
             get;
@@ -53,7 +95,8 @@ namespace TrayScanStandard.Models
 
         public CameraSetting[] ConnectAddresses { get; set; } = Enumerable.Range(0,32).Select(s => new CameraSetting()).ToArray();
 
-        public int CameraCnt { get; set; } = 1;
+        public int CameraCnt { get; set; } = 2;
+        public int DecodeRetryTimes { get; set; } = 2;
 
         //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
 
@@ -66,7 +109,8 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// 工位设置 // 防止有多工位的
         /// </summary>
-        public StageSetting StageSetting { get; set; } = new();        public int SelectBatteryId { get; set; } = 0;
+        public StageSetting StageSetting { get; set; } = new();        
+        public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
         public bool CameraEnable { get; set; } = false;
         
@@ -77,11 +121,18 @@ namespace TrayScanStandard.Models
         public bool IsAlgoEnable { get; set; } = true;
     }
 
-    public record LightInfo(string Com, int[] Values);
-    public record CameraSetting(
-
-        )
+    /// <summary>
+    /// 光源
+    /// </summary>
+    /// <param name="Com">串口号</param>
+    /// <param name="Values">亮度值</param>
+    public record LightInfo(string Com, int[] Values, string ControllerType = "Wordop");
+    public record CameraSetting()
     {
+        /// <summary>
+        /// 相机编号。用于把当前相机下 ROI 的本地通道号换算成上传时的全局通道号。
+        /// </summary>
+        public string CameraNumber { get; set; }
         public CameraAddress CameraAddresses { get; set; } = new HKAddress(new Key(""));
         public int[] Exposure { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();
         public int[] ExposureBackup { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();

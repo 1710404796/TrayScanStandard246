@@ -19,17 +19,20 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, ImmutableArray<CodeDetectResult>>> Handle(DetectCodeCommand request, CancellationToken cancellationToken)
         {
-
             var data = request.Params.Select((p, i) =>
             {
-                var path = $"{FilenameHelper.AppPath}Data2D\\Detect-{FilenameHelper.FileName}-{i}.png";
-                File.WriteAllBytes(path, p.ImageByte);
-                return vMWebAIClient.DetectCodesV1Async(path, p.ROIS, cancellationToken);
-            }
-            //vMWebAIClient.DetectCodesV1Async(p.ImagePath, p.ROIs, cancellationToken)
-            )
+                try
+                {
+                    var path = Path.Combine(FilenameHelper.AppPath, "Data2D", $"Detect-{FilenameHelper.FileName}-{i}.png");
+                    File.WriteAllBytes(path, p.ImageByte);
+                    return vMWebAIClient.DetectCodesV1Async(path, p.ROIS, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    return Task.FromResult(Either<string, CodeDetectResult>.Left($"检测异常: {ex.Message}"));
+                }
+            })
                 .TraverseSerial(s => s)
-                
             .Map(s => s.Traverse(s => s).Map(s => s.ToImmutableArray()));
             return data;
         }

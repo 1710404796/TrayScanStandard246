@@ -51,6 +51,7 @@ namespace TrayScanStandard.Models
                 "7" => BatteryLevel.DSD,
                 "8" => BatteryLevel.REWORK2,
                 "9" => MainStorage.Saves.TwoOk ? BatteryLevel.OK2 : BatteryLevel.OK,
+                "11"=>BatteryLevel.ERROR,
                 _ => BatteryLevel.NG
             };
         }
@@ -71,6 +72,7 @@ namespace TrayScanStandard.Models
         OK2 = 7,
         REWORK2 = 8,
         Unknown = 999,
+        ERROR=11,
         E99 = 100,
         DSD = 101,
     }

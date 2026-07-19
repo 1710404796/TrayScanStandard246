@@ -23,7 +23,19 @@ namespace TrayScanStandard.ViewModel
         public string ConnectText => IsConnect ? Properties.Resources.Connected : Properties.Resources.Disconnect;
 
         public CameraSetting BcrInfo => Image2DViewModel.CameraSetting;
-        public string Code => ((BcrInfo.CameraAddresses as HKAddress)?.ConnectAddress as Key)?.Value ?? "";
+        public string Code
+        {
+            get
+            {
+                var c =( BcrInfo.CameraAddresses switch
+                {
+                    HKAddress hk => hk.ConnectAddress as Key,
+                    HuaruiAddress hr => hr.ConnectAddress as Key,
+                    _ => null
+                })?.Value;
+                return c?? "";
+            }
+        }
 
         public int CameraIdx => Image2DViewModel?.CameraIdx ?? 0;
 

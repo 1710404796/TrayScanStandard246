@@ -1,0 +1,6 @@
+# Local build/restore artifacts (keep repo clean)
+.msbuild_sdks/
+.dotnet_cli_home/
+.nuget/
+restore-diag.log
+

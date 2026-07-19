@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Windows;
 using LinxUniverse.Auth;
 using MediatR;
 //using Microsoft.IdentityModel.Logging;
@@ -13,7 +14,7 @@ namespace TrayScanStandard.Mediator.Handlers
     /// </summary>
     /// <param name="authenticationStateProvider"></param>
     /// <param name="mediator"></param>
-    public class LoginCommandHandler(LinxAuthenticationStateProvider authenticationStateProvider, IMediator mediator) : IRequestHandler<LoginCommand, bool>
+    public class LoginCommandHandler(LinxAuthenticationStateProvider authenticationStateProvider, IMediator mediator, LinxUniverse.Auth.UserManager<LinxUser> userManager) : IRequestHandler<LoginCommand, bool>
     {
         public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
@@ -31,6 +32,23 @@ namespace TrayScanStandard.Mediator.Handlers
                 return true;
             }
 
+
+            var users = await userManager.GetAllUserAsync();
+            var user = users.FirstOrDefault(u => u.Password == request.userId);
+            if (user == null)
+            {
+                MessageBox.Show("用户不存在，请检查输入的ID卡号是否正确。", "登录失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            var roles = await userManager.GetUserRolesAsync(user);
+            string role = roles.First();
+
+
+            var aa = new ClaimsPrincipal(new ClaimsIdentity("login"));
+            aa.AddIdentity(new ClaimsIdentity([new Claim(ClaimTypes.Name, user.UserName)]));
+            aa.AddIdentity(new ClaimsIdentity([new Claim("role", role)]));
+
+
             //var res = await mediator.Send(new GetIdCardCheckCommand(request.userId));
             //if (res == null) return false;
             ////var aa = new ClaimsPrincipal(new LinxIdentity(){IsAuthenticated = true});
@@ -42,8 +60,8 @@ namespace TrayScanStandard.Mediator.Handlers
 
 
             //// 看看信息加哪里
-            //(authenticationStateProvider as StandLinxAuthenticationStateProvider)
-            //    .SetAuthenticationState(Task.FromResult(new AuthenticationState(aa)));
+            (authenticationStateProvider as StandLinxAuthenticationStateProvider)
+                .SetAuthenticationState(Task.FromResult(new AuthenticationState(aa)));
 
             return true;
         }

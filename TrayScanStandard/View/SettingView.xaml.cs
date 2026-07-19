@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TrayScanStandard.Service;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.View.User;
 using TrayScanStandard.ViewModel;
@@ -39,13 +40,28 @@ namespace TrayScanStandard.View
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            MainStorage.SaveManager.Save();
-            SaveButton.Content = "√ 保存成功";
             SaveButton.IsEnabled = false;
-            await Task.Delay(1000);
-            SaveButton.Content = "保存设定";
 
-            SaveButton.IsEnabled = true;
+            try
+            {
+                MainStorage.SaveManager.Save();
+
+                bool hasWcsIp = !string.IsNullOrWhiteSpace(MainStorage.Saves.WcsIP);
+                bool hasPlcIp = !string.IsNullOrWhiteSpace(MainStorage.Saves.PlcIp);
+
+                if (hasWcsIp || hasPlcIp)
+                {
+                    App.GetService<WcsTrayScanStandardServer>().ReloadSettings();
+                }
+
+                SaveButton.Content = "√ 保存成功";
+                await Task.Delay(1000);
+            }
+            finally
+            {
+                SaveButton.Content = "保存设定";
+                SaveButton.IsEnabled = true;
+            }
         }
 
         private void SetPower_Click(object sender, RoutedEventArgs e)

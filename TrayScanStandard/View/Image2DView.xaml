@@ -8,26 +8,23 @@
       mc:Ignorable="d" 
       d:DataContext="{d:DesignInstance Type=local:Image2DView}"
       Loaded="UserControl_Loaded"
-             Unloaded="UserControl_Unloaded"
-      d:DesignHeight="450" d:DesignWidth="800"
-      >
+      Unloaded="UserControl_Unloaded"
+      d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition ></ColumnDefinition>
             <ColumnDefinition Width="200"></ColumnDefinition>
-
         </Grid.ColumnDefinitions>
         <Grid x:Name="ImgGrid">
  
             <ScrollViewer
                 HorizontalScrollBarVisibility="Auto" 
-VerticalScrollBarVisibility="Auto"
-            >
+                VerticalScrollBarVisibility="Auto">
 
                 <local:ResizeAbleImage
- x:Name="img2d"
-                Source="{Binding ViewModel.ResultImg}">
+                    x:Name="img2d"
+                    Source="{Binding ViewModel.ResultImg}">
                 </local:ResizeAbleImage>
             </ScrollViewer>
 
@@ -35,77 +32,72 @@ VerticalScrollBarVisibility="Auto"
         <Border
             x:Name="ImgBorder"
             Grid.Column="1"
-BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
-            
+            BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
             BorderThickness="2,0,0,0">
 
             <ScrollViewer>
                 <StackPanel 
-            Orientation="Vertical"
-            HorizontalAlignment="Center"        
-                    >
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center">
                     <TextBlock 
-Width="123.6"
-    Margin="0,19.02,0,0"
-Text="电池方案:"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                        
-></TextBlock>
-                    <ComboBox Width="123.6" 
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        Text="电池方案:"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    </TextBlock>
+                    <ComboBox 
+                          Width="123.6" 
                           SelectedIndex="{Binding ViewModel.SelectIdx}"
                           ItemsSource="{Binding ViewModel.BatteryInfos}"
-                DisplayMemberPath="TypeName" 
-                          
-                          SelectionChanged="ComboBox_SelectionChanged"
-                          
-                          >
-
+                          DisplayMemberPath="TypeName" 
+                          SelectionChanged="ComboBox_SelectionChanged">
                     </ComboBox>
 
 
                     <!--<Button 
-    Width="123.6"
-        Margin="0,19.02,0,0"
-    x:Name="DebugCapture"
-    Content="{x:Static lang:Resources.DebuggingQRCodeScanning}"
-    Command="{Binding ViewModel.DebugCaptureCommand}"
-    ></Button>-->
+                            Width="123.6"
+                            Margin="0,19.02,0,0"
+                            x:Name="DebugCapture"
+                            Content="{x:Static lang:Resources.DebuggingQRCodeScanning}"
+                            Command="{Binding ViewModel.DebugCaptureCommand}">
+                         </Button>-->
+
                     <TextBlock 
-Width="123.6"
-    Margin="0,19.02,0,0"
-Text="调试曝光:"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                        
-></TextBlock>
-                    <TextBox 
-Width="123.6"
-    Margin="0,19.02,0,0"
-Text="{Binding ViewModel.DebugExpoure}"
-></TextBox>
-                    <Button 
-                Width="123.6"
+                        Width="123.6"
                         Margin="0,19.02,0,0"
-                x:Name="Capture"
-                Content="{x:Static lang:Resources.Capture}"
-                Command="{Binding ViewModel.CaptureCommand}" Click="Capture_Click_1"
-                ></Button>
+                        Text="调试曝光:"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    </TextBlock>
+
+                    <TextBox 
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        Text="{Binding ViewModel.DebugExpoure}">
+                    </TextBox>
 
                     <Button 
-Width="123.6"
-        Margin="0,19.02,0,0"
-x:Name="Detect"
-Content="检测"
-Command="{Binding ViewModel.DetectCommand}" 
-></Button>
-
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        x:Name="Capture"
+                        Content="{x:Static lang:Resources.Capture}"
+                        Command="{Binding ViewModel.CaptureCommand}" Click="Capture_Click_1">
+                    </Button>
 
                     <Button 
-Width="123.6"
-        Margin="0,19.02,0,0"
-x:Name="AutoRoi"
-Content="ROI自动框定"
-Click="AutoRoi_Click" 
-></Button>
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        x:Name="Detect"
+                        Content="检测"
+                        Command="{Binding ViewModel.DetectCommand}" >
+                    </Button>
+
+                    <Button 
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        x:Name="AutoRoi"
+                        Content="ROI自动框定"
+                        Click="AutoRoi_Click">
+                    </Button>      
 
                     <TextBlock 
                         Width="123.6"
@@ -114,154 +106,170 @@ Click="AutoRoi_Click"
                         FontSize="12"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                        
-                    />
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
                     
                     <TextBox 
                         Width="123.6"
                         Height="25"
                         Margin="0,5,0,0"
                         Text="{Binding ViewModel.RoiPadding, Mode=TwoWay}"
-                        HorizontalAlignment="Center"
-                    />
+                        HorizontalAlignment="Center"/>
 
                     <Button 
-Width="123.6"
-        Margin="0,19.02,0,0"
-x:Name="SortRoi"
-Content="ROI自动排序整理"
-                        Click="SortRoi_Click"
-></Button>
-
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        x:Name="SortRoi"
+                        Content="ROI自动排序整理"
+                        Click="SortRoi_Click">
+                    </Button>      
 
                     <!--<TextBlock Margin="10,0,0,0" Text="{Binding ViewMode.RatioText}"  FontSize="24"/>-->
                     <Button 
-    Width="123.6"
+                        Width="123.6"
                         Margin="0,19.02,0,0"
-    x:Name="SetCam"
-    Content="{x:Static lang:Resources.SetParameters}"
-    Click="SetCam_Click"
-    ></Button>
+                        x:Name="SetCam"
+                        Content="{x:Static lang:Resources.SetParameters}"
+                        Click="SetCam_Click">
+                    </Button>
 
                     <Button 
-    Width="123.6"
+                        Width="123.6"
                         Margin="0,19.02,0,0"
-    x:Name="AddBorder"
-    Content="{x:Static lang:Resources.AddSelectionBox}"
-    Click="AddBorder_Click"
-    ></Button>
+                        x:Name="AddBorder"
+                        Content="{x:Static lang:Resources.AddSelectionBox}"
+                        Click="AddBorder_Click">
+                    </Button>
 
                     <Button 
-Width="123.6"
-                    Margin="0,19.02,0,0"
-x:Name="SaveBtn"
-Content="{x:Static lang:Resources.SaveSettings}"
-Click="SaveBtn_Click"
-></Button>
+                        Width="123.6"
+                        Margin="0,19.02,0,0"
+                        x:Name="SaveBtn"
+                        Content="{x:Static lang:Resources.SaveSettings}"
+                        Click="SaveBtn_Click">
+                    </Button>      
+
                     <Border
-BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
                         Margin="0,19.02,0,0"
-            
-            BorderThickness="0,2,0,0" />
-                    <TextBlock Width="40"
+                        BorderThickness="0,2,0,0"/>
+
+                    <TextBlock 
+                        Width="40"
                         Margin="0,19.02,0,0"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center">Top:</TextBlock>
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">Top:</TextBlock>
                     <TextBox  
                         TextChanged="TopBox_TextChanged"
-                        x:Name="TopBox" Text="{Binding ViewModel.SelectBarCodeRegionInfo.Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        x:Name="TopBox" 
+                        Text="{Binding ViewModel.SelectBarCodeRegionInfo.Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
 
                     <TextBlock
                         Margin="0,19.02,0,0"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                               HorizontalAlignment="Left"
-                        
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        HorizontalAlignment="Left"
                         Width="40" VerticalAlignment="Center">Left:</TextBlock>
-                    <TextBox  x:Name="LeftBox" 
-               TextChanged="TopBox_TextChanged"
-                              
-                              
-                              Text="{Binding ViewModel.SelectBarCodeRegionInfo.Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox  
+                        x:Name="LeftBox" 
+                        TextChanged="TopBox_TextChanged"
+                        Text="{Binding ViewModel.SelectBarCodeRegionInfo.Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
 
                     <TextBlock
-               Margin="0,19.02,0,0"
-Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                      HorizontalAlignment="Left"
-               
-               Width="40" VerticalAlignment="Center">Width:</TextBlock>
-                    <TextBox  x:Name="WidthBox" 
-               TextChanged="TopBox_TextChanged"
-                          
-                          Text="{Binding ViewModel.SelectBarCodeRegionInfo.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        Margin="0,19.02,0,0"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        HorizontalAlignment="Left"
+                        Width="40" 
+                        VerticalAlignment="Center">Width:</TextBlock>
+                    <TextBox  
+                        x:Name="WidthBox" 
+                        TextChanged="TopBox_TextChanged"
+                        Text="{Binding ViewModel.SelectBarCodeRegionInfo.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
 
-                    <TextBlock Width="60"
-               Margin="0,19.02,0,0"
-Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Center">Height:</TextBlock>
+                    <TextBlock 
+                        Width="60"
+                        Margin="0,19.02,0,0"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">Height:</TextBlock>
                     <TextBox  
-               TextChanged="TopBox_TextChanged"
-               x:Name="HeightBox" Text="{Binding ViewModel.SelectBarCodeRegionInfo.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <TextBlock Width="60"
-               Margin="0,19.02,0,0"
-Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Center">Channel:</TextBlock>
+                        TextChanged="TopBox_TextChanged"
+                        x:Name="HeightBox" Text="{Binding ViewModel.SelectBarCodeRegionInfo.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>    
+
+                    <TextBlock 
+                        Width="60"
+                        Margin="0,19.02,0,0"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">Channel:</TextBlock>
                     <TextBox  
-                    TextChanged="ChannelBox_TextChanged"
-               x:Name="ChannelBox" Text="{Binding ViewModel.SelectBarCodeRegionInfo.ChannelIdx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        TextChanged="ChannelBox_TextChanged"
+                        x:Name="ChannelBox" 
+                        Text="{Binding ViewModel.SelectBarCodeRegionInfo.ChannelIdx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
 
                     <!-- 批量设置边框尺寸 -->
-                    <Border BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}" 
-                            BorderThickness="0,2,0,0" 
-                            Margin="0,10,0,5"/>
+                    <Border 
+                        BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}" 
+                        BorderThickness="0,2,0,0" 
+                        Margin="0,10,0,5"/>
                     
-                    <TextBlock Margin="0,10,0,5"
-                               Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                               FontWeight="Bold"
-                               Text="批量设置尺寸:"/>
+                    <TextBlock 
+                        Margin="0,10,0,5"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        FontWeight="Bold"
+                        Text="批量设置尺寸:"/>
                     
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                        <TextBlock Width="40"
-                                   Margin="0,0,5,0"
-                                   Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                                   VerticalAlignment="Center">宽度:</TextBlock>
-                        <TextBox x:Name="BatchWidthBox" 
-                                 Width="80"
-                                 Text="{Binding ViewModel.BatchWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock 
+                            Width="40"
+                            Margin="0,0,5,0"
+                            Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                            VerticalAlignment="Center">宽度:</TextBlock>
+                        <TextBox 
+                            x:Name="BatchWidthBox" 
+                            Width="80"
+                            Text="{Binding ViewModel.BatchWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                        <TextBlock Width="40"
-                                   Margin="0,0,5,0"
-                                   Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                                   VerticalAlignment="Center">高度:</TextBlock>
-                        <TextBox x:Name="BatchHeightBox" 
-                                 Width="80"
-                                 Text="{Binding ViewModel.BatchHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock 
+                            Width="40"
+                            Margin="0,0,5,0"
+                            Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                            VerticalAlignment="Center">高度:</TextBlock>
+                        <TextBox 
+                            x:Name="BatchHeightBox" 
+                            Width="80"
+                            Text="{Binding ViewModel.BatchHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                     </StackPanel>
-                    
-                    <Button Margin="0,5,0,10"
-                            Width="120"
-                            Click="ApplyBatchSize_Click" 
-                            Content="应用到所有边框"/>                    <Button 
-               Margin="0,19.02,0,0"
-    Width="123.6"
-    x:Name="DeleteBtn"
-    Content="{x:Static lang:Resources.DeleteTheSelectedBox}"
-    Click="Delete_Border_Click"
-    ></Button>
                     
                     <Button 
-               Margin="0,19.02,0,0"
-    Width="123.6"
-    x:Name="ClearAllBoxesBtn"
-    Content="清理所有选定框"
-    Click="ClearAllBoxes_Click"
-    ></Button>
-                    
+                        Margin="0,5,0,10"
+                        Width="120"
+                        Click="ApplyBatchSize_Click" 
+                        Content="应用到所有边框"/>
+
+                    <Button 
+                        Margin="0,19.02,0,0"
+                        Width="123.6"
+                        x:Name="DeleteBtn"
+                        Content="{x:Static lang:Resources.DeleteTheSelectedBox}"
+                        Click="Delete_Border_Click"/>
+
+                    <Button 
+                        Margin="0,19.02,0,0"
+                        Width="123.6"
+                        x:Name="ClearAllBoxesBtn"
+                        Content="清理所有选定框"
+                        Click="ClearAllBoxes_Click"/>
+
                     <TextBlock Margin="0,19.02,0,0" Text="{Binding ViewModel.RatioText, Mode=TwoWay}" TextWrapping="Wrap"></TextBlock>
                     <!--<Button Margin="0,19.02,0,0"  x:Name="Clear" Click="Clear_Click" Content="{x:Static lang:Resources.ClearDebuggingData}"/>-->
                 </StackPanel>

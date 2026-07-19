@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TrayScanStandard.View"
         mc:Ignorable="d"
       xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-        
+        WindowStartupLocation="CenterScreen"
          xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         Loaded="Window_Loaded"

@@ -7,77 +7,61 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-     <Grid MouseWheel="Grid_MouseWheel" 
-           MouseRightButtonDown="Grid_MouseRightButtonDown"
-           MouseRightButtonUp="Grid_MouseRightButtonUp"
-           MouseMove="Grid_MouseMove" >
-        <Grid.LayoutTransform >
-            <ScaleTransform  
-            x:Name="GTran"
-                
-                
-               ScaleX="1" 
- ScaleY="1"
-                
-                />
-        </Grid.LayoutTransform>
-        <Border 
- 
- BorderBrush="{StaticResource SystemControlPageTextBaseHighBrush}"
+    <Grid MouseWheel="Grid_MouseWheel" 
+          MouseRightButtonDown="Grid_MouseRightButtonDown"
+          MouseRightButtonUp="Grid_MouseRightButtonUp"
+          MouseMove="Grid_MouseMove" >
 
- BorderThickness="2"
- ClipToBounds="True"
- CornerRadius="0"
- x:Name="BImage"
- HorizontalAlignment="Center"
- VerticalAlignment="Center"
- RenderTransformOrigin="0.5, 0.5"
- >
+        <Grid.LayoutTransform >
+            <ScaleTransform  x:Name="GTran" ScaleX="1" ScaleY="1"/>
+        </Grid.LayoutTransform>
+
+        <Border BorderBrush="{StaticResource SystemControlPageTextBaseHighBrush}"
+                BorderThickness="2"
+                ClipToBounds="True"
+                CornerRadius="0"
+                x:Name="BImage"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                RenderTransformOrigin="0.5, 0.5">
+
          <Border.RenderTransform >
              <RotateTransform Angle="0" />
          </Border.RenderTransform>
-         <Grid
-     x:Name="ImageGrid1"
+         <Grid x:Name="ImageGrid1">
 
-     >
              <Image x:Name="img">
                  <Image.LayoutTransform>
-
-                     <ScaleTransform 
-                        
-                       />
+                     <ScaleTransform />
                  </Image.LayoutTransform>
              </Image>
+
+             <!--ROI边框图层-->
                 <Canvas 
-    Width="{Binding ElementName=ImageGrid1, Path=ActualWidth}"
-    Height="{Binding ElementName=ImageGrid1, Path=ActualHeight}"
-              HorizontalAlignment="Center"
-        x:Name="borderCanvas"
-    VerticalAlignment="Center"
-    RenderTransformOrigin="0.5, 0.5"
-    
-        >
+                Width="{Binding ElementName=ImageGrid1, Path=ActualWidth}"
+                Height="{Binding ElementName=ImageGrid1, Path=ActualHeight}"
+                HorizontalAlignment="Center"
+                x:Name="borderCanvas"
+                VerticalAlignment="Center"
+                RenderTransformOrigin="0.5, 0.5">
                     <!--<Canvas.RenderTransform >
                         <RotateTransform Angle="90" />
                     </Canvas.RenderTransform>-->
                 </Canvas>
 
+                <!--结果显示图层-->
                 <Canvas 
-Width="{Binding ElementName=ImageGrid1, Path=ActualWidth}"
-Height="{Binding ElementName=ImageGrid1, Path=ActualHeight}"
-          HorizontalAlignment="Center"
-    x:Name="ResultCanvas"
-VerticalAlignment="Center"
-RenderTransformOrigin="0.5, 0.5"
-
-    >
+                Width="{Binding ElementName=ImageGrid1, Path=ActualWidth}"
+                Height="{Binding ElementName=ImageGrid1, Path=ActualHeight}"
+                HorizontalAlignment="Center"
+                x:Name="ResultCanvas"
+                VerticalAlignment="Center"
+                RenderTransformOrigin="0.5, 0.5">
                     <!--<Canvas.RenderTransform >
                     <RotateTransform Angle="90" />
                 </Canvas.RenderTransform>-->
                 </Canvas>
             </Grid>
-
      </Border>
-
  </Grid>
 </UserControl>

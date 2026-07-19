@@ -5,16 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrayScanStandard"
         mc:Ignorable="d"
-      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-      Loaded="Window_Loaded"
-       Closed="Window_Closed" 
+        xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed" 
         Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=local:MainWindow}"
-      xmlns:view="clr-namespace:TrayScanStandard.View"
+        xmlns:view="clr-namespace:TrayScanStandard.View"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        
-        
         Title="MainWindow" Height="800" Width="1440">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -29,80 +28,83 @@
 
 
 
-        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" >
-    
-</Image>-->
+        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" > </Image>-->
         <Border CornerRadius="20" 
-        Visibility="{Binding ViewModel.HasBackGround}"
-        Margin="20" Grid.Column="1" Grid.Row="1">
+                Visibility="{Binding ViewModel.HasBackGround}"
+                Margin="20" 
+                Grid.Column="1" 
+                Grid.Row="1">
             <Border.Background>
-                <ImageBrush ImageSource="Images/beier.png"
-                            Opacity="0.1" />
+                <ImageBrush ImageSource="Images/beier.png" Opacity="0.1" />
             </Border.Background>
         </Border>
-        <TextBlock VerticalAlignment="Center"
-        FontSize="20" 
-                Text="扫码工具"
-        HorizontalAlignment="Center"
-        ></TextBlock>
+
+        <TextBox VerticalAlignment="Center"
+                   FontSize="20" 
+                   Text="{Binding ViewModel.Saves.TrayScanStandardName,Mode=TwoWay}"
+                   HorizontalAlignment="Center">
+        </TextBox>
         <!--<TextBlock Grid.Column="1"
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
            FontSize="20"
-           Text="{Binding ViewModel.Title}"
-           >
+           Text="{Binding ViewModel.Title}">
 
         </TextBlock>-->
       
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <!-- <StackPanel></StackPanel> -->
-            <Image 
-Grid.Column="1"
-VerticalAlignment="Center"
-Margin="0,5,100,5"
-Source="Images/linx.png" HorizontalAlignment="Center"></Image>
+            <!--<Image 
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="0,5,100,5"
+                        Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
+            <!--<TextBlock VerticalAlignment="Center" 
+                        FontSize="15" 
+                        Text="WCS连接状态:"
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+            <TextBlock Text="{Binding ViewModel.WcsStatus}" 
+                        VerticalAlignment="Center" 
+                        FontWeight="Bold" 
+                        Foreground="{Binding ViewModel.WcsColor}" 
+                        Margin="10,0,10,0"/>-->
+
+            <TextBlock VerticalAlignment="Center" 
+                        FontSize="15" 
+                        Text="物流线连接状态：" 
+                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+            <TextBlock Text="{Binding ViewModel.PlcStatus}"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Foreground="{Binding ViewModel.PlcColor}"
+                        Margin="10,0,10,0"/>
 
 
-            <TextBlock
-    VerticalAlignment="Center"
-    FontSize="15"
-    Text="{x:Static lang:Resources.PLCStatus}"
-    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-></TextBlock>
-            <TextBlock
-    Text="{Binding ViewModel.PlcStatus}"
-    
-    VerticalAlignment="Center"
-    FontWeight="Bold"
-    Foreground="{Binding ViewModel.PlcColor}"
-    Margin="10,0,0,0"
-
-    ></TextBlock>
             <TextBlock VerticalAlignment="Center"
-           Margin="10,0,0,0"
-    Text="{x:Static lang:Resources.CurrentOperator}"
-
-           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-           FontSize="15" ></TextBlock>
+                       Margin="10,0,0,0"
+                       Text="当前操作员："
+                       Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                       FontSize="15"/>
             <TextBlock VerticalAlignment="Center"
-           FontSize="15"
-           Margin="10,0,0,0"
+                       FontSize="15"
+                       Margin="10,0,0,0"
+                       Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                       Text="{Binding ViewModel.Username}"/>
 
-           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-           Text="{Binding ViewModel.Username}"
-           ></TextBlock>
+
             <!--<Button Click="Button_Click">Test</Button>-->
-            <Button 
-    Margin="10,0,20,0"
-    Command="{Binding ViewModel.SignOutCommand}"
-    Content="{x:Static lang:Resources.Logout}"
-    VerticalAlignment="Center"></Button>
-            <ComboBox  VerticalAlignment="Center"
-           Margin="0,0,20,0"
-           Width="100"
-           SelectionChanged="SelectLangBox_SelectionChanged"
-           x:Name="SelectLangBox">
-                <ComboBoxItem >中文</ComboBoxItem>
+            <Button Margin="10,0,20,0"
+                    Command="{Binding ViewModel.SignOutCommand}"
+                    Content="{x:Static lang:Resources.Logout}"
+                    VerticalAlignment="Center"/>
+
+
+            <ComboBox VerticalAlignment="Center"
+                       Margin="0,0,20,0"
+                       Width="100"
+                       SelectionChanged="SelectLangBox_SelectionChanged"
+                       x:Name="SelectLangBox">
+                <ComboBoxItem>中文</ComboBoxItem>
                 <ComboBoxItem>English</ComboBoxItem>
                 <ComboBoxItem>Magyar nyelv</ComboBoxItem>
             </ComboBox>
@@ -110,107 +112,90 @@ Source="Images/linx.png" HorizontalAlignment="Center"></Image>
 
         <StackPanel Grid.Row="1" Visibility="Visible">
 
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-IsChecked="True"
-                Click="RadioButton_Click"
->
-                工作面板
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         IsChecked="True"
+                         Click="RadioButton_Click">
+                电芯条码显示
             </RadioButton>
 
-
-            <RadioButton 
-        Style="{StaticResource MenuRadioButtonStyle}" 
-        Cursor="Hand"
-        IsChecked="True"
-                x:Name="CameraList"
-                Click="CameraList_Click"
-        >
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         IsChecked="True"
+                         x:Name="CameraList"
+                         Click="CameraList_Click">
                 相机管理界面
             </RadioButton>
 
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-                x:Name="LightBtn"
-                Click="LightBtn_Click"
->
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="LightBtn"
+                         Click="LightBtn_Click">
                 光源管理界面
             </RadioButton>
 
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-                x:Name="ZPALgo"
-                Click="ZPALgo_Click"
->
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="ZPALgo"
+                         Click="ZPALgo_Click">
                 组盘扫码日志
             </RadioButton>
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-                x:Name="BatteryManager"
-                Click="BatteryManager_Click"
-                 Content="{x:Static lang:Resources.ManagementOfBatteryCellTypes}"
->
 
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="BatteryManager"
+                         Click="BatteryManager_Click">
+                电芯种类管理
             </RadioButton>
 
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-x:Name="LogDash"
-Click="LogDash_Click"
-        Content="{x:Static lang:Resources.LogWindow}"
-        
->
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="LogDash"
+                         Click="LogDash_Click">
+                日志窗口
+            </RadioButton>
 
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="Setting"
+                         Click="Setting_Click">
+                程序参数设定
             </RadioButton>
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-x:Name="Setting"
-        Content="{x:Static lang:Resources.ParameterSettings}"
-        
-Click="Setting_Click"
->
+
+            <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
+                         Cursor="Hand"
+                         x:Name="PowerManager"
+                         Click="PowerManager_Click">
+                权限管理
             </RadioButton>
-            <RadioButton 
-Style="{StaticResource MenuRadioButtonStyle}" 
-Cursor="Hand"
-x:Name="PowerManager"
-        Content="{x:Static lang:Resources.AccessControl}"
-        
-Click="PowerManager_Click"
->
-            </RadioButton>
-            <!--<CheckBox HorizontalAlignment="Center" 
-              IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
-        Visibility="{Binding ViewModel.View2}"
-               Click="CheckBox_Click_1"
-              >测试模式</CheckBox>-->
+            <!--<CheckBox 
+                        HorizontalAlignment="Center" 
+                        IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
+                        Visibility="{Binding ViewModel.View2}"
+                        Click="CheckBox_Click_1">测试模式</CheckBox>-->
+
         </StackPanel>
-       
-        <Frame Grid.Row="1"
-       Grid.Column="1"
-       NavigationUIVisibility="Hidden"
-       Margin="5,5,25,25"
-       x:Name="ContentFrame">
 
+        <Frame Grid.Row="1"
+               Grid.Column="1"
+               NavigationUIVisibility="Hidden"
+               Margin="5,5,25,25"
+               x:Name="ContentFrame">       
         </Frame>
 
-        <view:LockScreenView
-Visibility="{Binding ViewModel.IsLock}"
-x:Name="LockScreen" Grid.ColumnSpan="3" Grid.RowSpan="2">
-
+        <view:LockScreenView Visibility="{Binding ViewModel.IsLock}"
+                             x:Name="LockScreen" 
+                             Grid.ColumnSpan="3" 
+                             Grid.RowSpan="2">
         </view:LockScreenView>
-        <view:Busying 
-     Visibility="{Binding ViewModel.IsBusy}"
-     Opacity="0.5"
-     Progess="{Binding ViewModel.Progg}"
-     BusyText="{Binding ViewModel.BusyMessage}"
-     
-     x:Name="BusyingScreen" Grid.ColumnSpan="2" Grid.RowSpan="2"></view:Busying>
+
+        <view:Busying Visibility="{Binding ViewModel.IsBusy}"
+                      Opacity="0.5"
+                      Progess="{Binding ViewModel.Progg}"
+                      BusyText="{Binding ViewModel.BusyMessage}"
+                      x:Name="BusyingScreen"
+                      Grid.ColumnSpan="2" 
+                      Grid.RowSpan="2">
+        </view:Busying>
     </Grid>
 </Window>

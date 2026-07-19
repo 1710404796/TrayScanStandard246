@@ -1,4 +1,4 @@
-﻿global using LanguageExt;
+global using LanguageExt;
 global using static LanguageExt.Prelude;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
+using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -21,10 +24,12 @@ using TrayScanStandard.Data;
 using TrayScanStandard.Jobs;
 using TrayScanStandard.Mediator.Behaviors;
 using TrayScanStandard.Service;
+using TrayScanStandard.Services;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
 using TrayScanStandard.ViewModel.CZPallet;
+using TrayScanStandard.Utils;
 using VMWebAIClient;
 
 namespace TrayScanStandard
@@ -48,7 +53,7 @@ namespace TrayScanStandard
             //var a = typeof(T);
             if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
             {
-                throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
+                throw new ArgumentException($"{typeof(T)} 需要在App.xaml.cs.的ConfigureServices中进行注册。");
             }
 
             return service;
@@ -66,6 +71,16 @@ namespace TrayScanStandard
                 Application.Current.Shutdown();
                 return;
             }
+
+
+                        // 提前初始化文件日志，确保 InitCST 等启动日志能被记录（此时还未获取 RichTextBox，仅写文件）
+            Log.Logger = new LoggerConfiguration()
+              .MinimumLevel.Debug()
+              .MinimumLevel.Override("System.Net.Http.HttpClient", Serilog.Events.LogEventLevel.Warning)
+              .MinimumLevel.Override("Quartz", Serilog.Events.LogEventLevel.Information)
+              .MinimumLevel.Override("Microsoft.Extensions.Http", Serilog.Events.LogEventLevel.Information)
+              .CreateLogger();
+
             MainStorage.Init();
             //if (MainStorage.Saves.Stage == null)
             //{
@@ -96,15 +111,26 @@ namespace TrayScanStandard
                                  trigger.ForJob(jobKey1).WithCronSchedule("0 10 * * * ?");
                              });
 
-                         });
+                             // 【已移除心跳】
+                             // JobKey heartbeatJobKey = JobKey.Create(nameof(HeartbeatJobs));
+                             // config.AddJob<HeartbeatJobs>(heartbeatJobKey).AddTrigger(trigger =>
+                             // {
+                             //     trigger.ForJob(heartbeatJobKey)
+                             //         .StartNow()
+                             //         .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever());
+                             // });
 
+                         });
 
                          services.AddQuartzHostedService(config =>
                          {
                              config.WaitForJobsToComplete = true;
                          });
 
-                         services.AddSingleton<LinxAuthenticationStateProvider, StandLinxAuthenticationStateProvider<LinxUser>>();
+                         // 原实现（保留）：
+                         // services.AddSingleton<LinxAuthenticationStateProvider, StandLinxAuthenticationStateProvider<LinxUser>>();
+                         // 新实现：使用项目内Provider，避免基线库15分钟重验证导致强制锁屏
+                         services.AddSingleton<LinxAuthenticationStateProvider, TrayScanAuthenticationStateProvider>();
 
                          services.AddAuth<LinxUser>();
 
@@ -129,6 +155,9 @@ namespace TrayScanStandard
                          services.AddTransient<LightManagerView>();
                          services.AddTransient<LightManagerViewModel>();
 
+                         // 光源服务（Wordop 使用单例 + 启动自动连接）
+                         services.AddSingleton<WordopLightService>();
+                         services.AddSingleton<CognexLightService>();
 
                          services.AddTransient<ImageDisplayView>();
                          services.AddSingleton<ImageDisplayViewModel>();
@@ -145,10 +174,13 @@ namespace TrayScanStandard
                          services.AddSingleton<CacheService>();
 
                          services.AddSingleton<ScanCameraService>();
+                         services.AddSingleton<WcsTrayScanStandardServer>();
+                        services.AddSingleton<PlcModbusHealthService>();
 
-                         services.AddTransient<StationSettingView>();
+                        services.AddTransient<StationSettingView>();
 
 
+                         // 注入光源CST服务
                          services.AddCstService();
 
 
@@ -183,9 +215,13 @@ namespace TrayScanStandard
                      })
                      .ConfigureWebHostDefaults(webHostBuilder =>
                      {
-
+                        
                          webHostBuilder.UseStartup<Startup>();
-                         webHostBuilder.UseUrls($"http://*:{MainViewModel.Saves.Port}");
+                         // 原实现（保留）：
+                         // webHostBuilder.UseUrls($"http://*:{MainViewModel.Saves.WcsHeartPort}");
+                         // 新实现：程序内部WebHost使用独立端口，避免与WCS心跳Socket端口冲突导致“自连接在线”
+                         const int localApiPort = 18080;
+                         webHostBuilder.UseUrls($"http://*:{localApiPort}");
                          webHostBuilder.ConfigureKestrel((context, options) =>
                          {
                              // Handle requests up to 50 MB
@@ -245,6 +281,16 @@ namespace TrayScanStandard
 
             var res =  manager.StartProcessAsync("vmapi").Result;
             Host.Start();
+
+            try
+            {
+                GetService<ScanCameraService>().Init();
+                logger.LogInformation("启动初始化：已触发相机自动连接");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "启动初始化：相机自动连接触发失败");
+            }
         }
         static ProcessManager manager;
         private static void InitContext()
@@ -252,6 +298,7 @@ namespace TrayScanStandard
             LinxContext DB = GetService<LinxContext>();
             // DB.Database.EnsureCreated();
             DB.Database.Migrate();
+            BatteryRoiJsonStore.SyncToDatabase(DB);
             //
             //foreach (var batteryInfo in DB.BatteryInfos.ToList())
             //{

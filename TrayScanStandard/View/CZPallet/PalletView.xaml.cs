@@ -186,7 +186,7 @@ namespace TrayScanStandard.View.CZPallet
                     if (border != null)
                     {
                         // Clear all mouse down event handlers to prevent memory leaks
-                        border.MouseDown = null;
+                        //border.MouseDown -= null;
                         // Clear binding to release references
                         BindingOperations.ClearAllBindings(border);
                         

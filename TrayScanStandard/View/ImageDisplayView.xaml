@@ -14,24 +14,34 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50px"></RowDefinition>
             <RowDefinition Height="50px"></RowDefinition>
-            <RowDefinition
-                Height="{Binding ElementName=zqd, Path=Height}">
-            </RowDefinition>
+            <RowDefinition Height="{Binding ElementName=zqd, Path=Height}"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button
-                Width="150" 
-                Margin="5"
-                Command="{Binding ViewModel.RefreshCommand}">
+            <Button Width="150" 
+                    Margin="5"
+                    Command="{Binding ViewModel.RefreshCommand}">
                 刷新(同步档位数据)
             </Button>
+
             <Button Width="150" 
                     Margin="5"
                     Foreground="Red"
                     Command="{Binding ViewModel.ResetCommand}">
                 重置此面板
             </Button>
+
+            <Border Width="10" 
+                    Margin="10,0,0,3"
+                    BorderThickness="2"
+                    Height="10" 
+                    BorderBrush="Green"/>
+
+            <TextBlock Margin="5,15,0,0"
+                       Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                       正常
+            </TextBlock>
+
             <!--<CheckBox IsChecked="{Binding ViewModel.Yy280Code}">280亚银标签</CheckBox>-->
             <!--<Button Width="150" 
         Margin="5"
@@ -40,7 +50,7 @@
             </Button>-->
 
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+        <!--<StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
             <Border Width="10" 
                     Margin="10,0,0,0"
                     BorderThickness="2"
@@ -53,54 +63,44 @@
                 正常
             </TextBlock>
 
-        </StackPanel>
+        </StackPanel>-->
 
 
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Left"
-                   Name="zqd">
-            <StackPanel
-                Margin="5">
-                <TextBlock
-                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
-                    产品型号代码:
+        <WrapPanel Grid.Row="1" Name="zqd">
+            <StackPanel Margin="5,15,0,0">
+                <TextBlock Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    产品型号：
                 </TextBlock>
-                <ComboBox Width="150"
-                          
-                          SelectionChanged="ComboBox_SelectionChanged_1"
-                        
-                          SelectedItem="{Binding ViewModel.SelectBatteryInfo}"
-                          ItemsSource="{Binding ViewModel.BatteryInfos}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate
-                            DataType="{x:Type model:BatteryTypeInfo}">
-                            <TextBlock
-                                Text="{Binding TypeName}">
-                            </TextBlock>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                 <!--<ComboBox Width="150" 
+
+                <!--<ComboBox Width="150" 
                            SelectedItem="{Binding ViewModel.SelectProModel, UpdateSourceTrigger=PropertyChanged}" 
                            SelectionChanged="Selector_OnSelectionChanged" 
                            ItemsSource="{Binding ViewModel.ProModels}"> 
                  
-                 </ComboBox>--> 
+                 </ComboBox>-->
             </StackPanel>
 
+            <StackPanel Margin="5">
+                <ComboBox Width="150"
+                          SelectionChanged="ComboBox_SelectionChanged_1"
+                          SelectedItem="{Binding ViewModel.SelectBatteryInfo}"
+                          ItemsSource="{Binding ViewModel.BatteryInfos}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:BatteryTypeInfo}">
+                            <TextBlock Text="{Binding TypeName}"></TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
 
-
-  
-            <StackPanel
-                Margin="5">
-                <TextBlock
-                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
-                    <!-- 扫码: -->
-                </TextBlock>
+            <StackPanel Margin="5">
+                <!--<TextBlock Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                     扫码: 
+                </TextBlock>-->
                 <Button Width="150"
                         IsEnabled="{Binding ViewModel.IsFree}"
                         x:Name="DelectBtn"
-                        Click="DelectBtn_Click"
-                        >
+                        Click="DelectBtn_Click">
                     扫码
                 </Button>
             </StackPanel>
@@ -110,7 +110,9 @@
                 Margin="5">
                 <TextBlock
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
-                    --><!-- 提交: --><!--
+                    -->
+            <!-- 提交: -->
+            <!--
                 </TextBlock>
                 <Button Width="150" Name="Upload"
                         IsEnabled="{Binding ViewModel.IsFree}"
@@ -137,13 +139,7 @@
 
                             </czpallet:PalletView>
                         </Viewbox>
-                     
-
-                            <!--<StackPanel 
-           Orientation="Vertical"
-           Name="Pallet">
-
-                        </StackPanel>-->
+                        <!--<StackPanel Orientation="Vertical" Name="Pallet"> </StackPanel>-->
                     </ScrollViewer>
                 </TabItem>
             </TabControl>

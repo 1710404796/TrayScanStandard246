@@ -52,7 +52,7 @@ namespace TrayScanStandard.Service.Models
         /// 0-正常；非0-异常
         /// </summary>
         [JsonPropertyName("responseCode")]
-        public string ResponseCode { get; set; }
+        public int ResponseCode { get; set; }
         /// <summary>
         /// 请求结果描述
         /// responseCode != 0时可填入异常描述信息

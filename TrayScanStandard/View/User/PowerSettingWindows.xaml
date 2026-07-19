@@ -4,13 +4,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:TrayScanStandard.View.User"
-      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+        xmlns:lang="clr-namespace:TrayScanStandard.Properties"
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen"
         Title="权限设定页面" SizeToContent="Height" Width="700"
-        Loaded="PowerSettingWindows_OnLoaded"
-        >
+        Loaded="PowerSettingWindows_OnLoaded">
+
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -21,12 +22,10 @@
                 HorizontalAlignment="Center" 
                 Margin="0,20,0,20"
                 Text="{x:Static lang:Resources.PermissionsSetting}"
-                
                 FontSize="20"></TextBlock>
         </StackPanel>
         <Button Grid.Row="1"
                 Content="{x:Static lang:Resources.Save}"
-                
                 HorizontalAlignment="Center" Width="100" Click="ButtonBase_OnClick">
         </Button>
     </Grid>

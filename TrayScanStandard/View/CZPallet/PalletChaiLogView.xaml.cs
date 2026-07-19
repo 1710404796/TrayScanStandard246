@@ -21,7 +21,7 @@ namespace TrayScanStandard.View.CZPallet
     /// <summary>
     /// PalletChaiLogView.xaml 的交互逻辑
     /// </summary>
-    [PowerView(PowerEnum.拆盘日志)]
+    //[PowerView(PowerEnum.拆盘日志)]
     public partial class PalletChaiLogView : Page
     {
         public PalletChaiLogViewModel ViewModel

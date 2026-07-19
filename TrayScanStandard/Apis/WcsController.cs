@@ -19,6 +19,9 @@ namespace TrayScanStandard.Apis
         , MainViewModel mainViewModel
         ): ControllerBase
     {
+        //[HttpGet("/CaptureImage")] 北京时代
+        //[HttpPost("/Photo")] 福鼎时代
+        private const string ERROR = "ERROR";
         [HttpGet("/CaptureImage")]
         public async Task<QRCodeResult> Delect()
         {
@@ -28,9 +31,10 @@ namespace TrayScanStandard.Apis
             }
             logger.LogInformation("收到检测任务");
 
-            if (MainStorage.SelectBattery is null) return new QRCodeResult() { ErrorCode = ErrorType.SomeResultError };
+           if (MainStorage.SelectBattery is null) return new QRCodeResult() { ErrorCode = ErrorType.SomeResultError };
 
-            var data = await mediator.Send(new DelectCCDCommand(MainStorage.SelectBattery));
+            var startTime = DateTime.UtcNow;
+            var data = await mediator.Send(new DetectCCDCommand(MainStorage.SelectBattery));
             GC.Collect();
             data.IfRight(
                 r =>
@@ -58,6 +62,23 @@ namespace TrayScanStandard.Apis
                     linxContext.SaveChanges();
                 }
                 );
+
+            var elapsed = (DateTime.UtcNow - startTime).TotalSeconds;
+            data.Match(
+                Right: r =>
+                {
+                    var successCount = r.Channels.Count(c => !string.IsNullOrEmpty(c.Code));
+                    var failCount = r.Channels.Count - successCount;
+                    var failChannels = r.Channels.Where(c => string.IsNullOrEmpty(c.Code)).Select(c => c.Index);
+                    logger.LogInformation(
+                        "WCS扫码任务完成，耗时{Elapsed:F1}秒，成功{SuccessCount}个，未扫到{FailCount}个，未扫到通道[{FailChannels}]",
+                        elapsed, successCount, failCount, string.Join(",", failChannels));
+                },
+                Left: e =>
+                {
+                    logger.LogInformation("WCS扫码任务失败，耗时{Elapsed:F1}秒，错误：{Error}", elapsed, e);
+                }
+            );
 
             //retry<>
             return data.Match(
@@ -88,6 +109,7 @@ namespace TrayScanStandard.Apis
     {
         Successed,
         CameraError,
+        //ERROR,
         SomeResultError,
     }
 

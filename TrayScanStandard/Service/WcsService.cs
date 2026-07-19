@@ -17,12 +17,8 @@ using TrayScanStandard.Service.Models;
 
 namespace TrayScanStandard.Service
 {
-    public class WcsService
-        (HttpClient httpClient, ILogger<WcsService> logger, IMediator mediator, LinxContext linxContext)
+    public class WcsService (HttpClient httpClient, ILogger<WcsService> logger, IMediator mediator, LinxContext linxContext)
     {
-
-
-
 
         // 高阶函数包裹一下 // 这是中间件吗
         public static Func<TIn, Task<TOut>> MakeApi<TIn, TOut>
@@ -63,12 +59,11 @@ namespace TrayScanStandard.Service
             return LogMiddleWare<GrabResponse>("wcs/grab", data);
         }
 
-
-
         public Task<Result<PostDeviceStatusResponse>> PostDeviceStatusAsync(PostDeviceStatusRequest data)
         {
             return LogMiddleWare<PostDeviceStatusResponse>("inventory/postDeviceStatus", data);
         }
+
         public Task<Result<DeviceErrorResponse>> DeviceErrorAsync(DeviceErrorRequest data)
         {
             return LogMiddleWare<DeviceErrorResponse>("issue/deviceError", data);
@@ -78,10 +73,12 @@ namespace TrayScanStandard.Service
         {
             return LogMiddleWare<AskFakeCellResponse>("wcs/askFakeCell", data);
         }
+
         public Task<Result<MoveFakeCellResponse>> MoveFakeCellResponse(MoveFakeCellRequest data)
         {
             return LogMiddleWare<MoveFakeCellResponse>("wcs/moveFakeCell", data);
         }
+
         System.Collections.Generic.HashSet<string> _fakeCellSet = [];
         public async Task WaitForFakeCell(string stationName, CancellationToken cancellationToken)
         {
@@ -267,7 +264,7 @@ namespace TrayScanStandard.Service
                     //string resStr = JsonSerializer.Serialize(resData);
                     log.Response = resStr;
 
-                    if (resData.ResponseCode != "0")
+                    if (resData.ResponseCode != 0)
                     {
                         if (shouldLog)
                             await mediator.Send(new WcsDataWarningBoxCommand(resData.ResponseMessage));

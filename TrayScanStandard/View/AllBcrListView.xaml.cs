@@ -28,7 +28,7 @@ namespace TrayScanStandard.View
     /// <summary>
     /// AllBcrListView.xaml 的交互逻辑
     /// </summary>
-    [PowerView(PowerEnum.相机列表)]
+    //[PowerView(PowerEnum.相机列表)]
     public partial class AllBcrListView : Page
     {
         List<BcrBorder> _borderList = [];
@@ -60,6 +60,10 @@ namespace TrayScanStandard.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateRatio();
+            if (CRService.BcrBorderViewModels.Length != MainStorage.Saves.CameraCnt)
+            {
+                CRService.Init();
+            }
 
             int idx = 0;
             double x = 10, y = 10; // 初始位置
@@ -67,7 +71,7 @@ namespace TrayScanStandard.View
             double itemWidth = 320, itemHeight = 320;
             double spacing = 10;
 
-            foreach (var item in CRService.BcrBorderViewModels)
+            foreach (var item in CRService.BcrBorderViewModels.Take(MainStorage.Saves.CameraCnt))
             {
                 int i = idx;
                 var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
@@ -282,18 +286,30 @@ namespace TrayScanStandard.View
 
             try
             {
-                var res = await meditor.Send(new DelectCCDCommand(MainStorage.SelectBattery));
-                logger.LogInformation("结果: {0}", res);
+                var battery = EnsureSelectedBattery();
+                if (battery == null)
+                {
+                    MessageBox.Show("电池信息为空");
+                    return;
+                }
+
+                logger.LogInformation("全相机扫码开始：电池={Battery}，通道数={Count}",
+                    $"{battery.Id}:{battery.TypeName}", battery.Count);
+                var res = await meditor.Send(new DetectCCDCommand(battery));
 
                 res.Match(
                     Right: r =>
                     {
-                        logger.LogInformation("结果: {0}", r.Channels);
+                        
+                        if (r.Channels.All(c => c.Code == "noread"))
+                        {
+                            logger.LogWarning("全部通道未识别到条码 (noread)");
+                        }
                     },
                     Left: l =>
                     {
-                        logger.LogError(l);
-                        MessageBox.Show(l);
+                        logger.LogError("全相机扫码失败：{Error}", l);
+                        meditor.Send(new AddToWarningCommand(l));
                     }
                     );
 
@@ -301,7 +317,7 @@ namespace TrayScanStandard.View
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "error");
+                logger.LogError(ex, "全相机扫码异常");
             }
 
             (sender as Button)!.IsEnabled = true;
@@ -322,23 +338,35 @@ namespace TrayScanStandard.View
             if (_cts != null && !_cts.IsCancellationRequested)
             {
                 (sender as Button)!.Content = Properties.Resources.DebuggingQRCodeScanning;
+                logger.LogInformation("调试扫码已停止");
                 _cts.Cancel();
             }
             else
             {
                 (sender as Button)!.Content = Properties.Resources.StopDebugging;
+                var battery = EnsureSelectedBattery();
+                logger.LogInformation("调试扫码已启动：电池={Battery}",
+                    battery != null ? $"{battery.Id}:{battery.TypeName}" : "未选择");
                 _cts = new CancellationTokenSource();
                 
                 while (!_cts.Token.IsCancellationRequested)
                 {
                     try
                     {
-                        var res = await meditor.Send(new DelectCCDCommand(MainStorage.SelectBattery));
+                        battery = EnsureSelectedBattery();
+                        if (battery == null)
+                        {
+                            logger.LogWarning("调试扫码失败：电池信息为空");
+                            await Task.Delay(1000);
+                            continue;
+                        }
+
+                        var res = await meditor.Send(new DetectCCDCommand(battery));
                         UpdateRatio();
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex, "error");
+                        logger.LogError(ex, "调试扫码异常");
                     }
                     finally
                     {
@@ -353,6 +381,35 @@ namespace TrayScanStandard.View
             GC.Collect();
             //MainStorage.Saves.OkCnt = MainStorage.Saves.ScanCnt = 0;    
             UpdateRatio();
+        }
+
+        private BatteryTypeInfo? EnsureSelectedBattery()
+        {
+            if (MainStorage.SelectBattery != null)
+            {
+                return MainStorage.SelectBattery;
+            }
+
+            try
+            {
+                var battery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId)
+                    ?? linxContext.BatteryTypeInfos.FirstOrDefault();
+
+                MainStorage.SelectBattery = battery;
+                if (battery != null)
+                {
+                    MainStorage.Saves.SelectBatteryId = battery.Id;
+                    MainStorage.SaveManager.Save();
+                    logger.LogInformation("兜底加载电池信息成功：Id={Id}", battery.Id);
+                }
+
+                return battery;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "兜底加载电池信息失败");
+                return null;
+            }
         }
     }
 }

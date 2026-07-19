@@ -9,7 +9,7 @@ namespace TrayScanStandard.Service.Models
 {
     public interface IWcsResponse
     {
-        string ResponseCode { get; }
+        int ResponseCode { get; }
         string? ResponseMessage { get; }
     }
 
