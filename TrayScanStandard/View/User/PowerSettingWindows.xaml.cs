@@ -1,87 +1,114 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-//using Microsoft.IdentityModel.Logging;
 using TrayScanStandard.Attritubes;
-using XCZZJC2024.Utils;
 
 namespace TrayScanStandard.View.User
 {
     public partial class PowerSettingWindows : Window
     {
+        private static readonly RoleEnum[] VisibleRoles = Enum.GetValues<RoleEnum>().SkipLast(1).ToArray();
+
+        private readonly Dictionary<PowerEnum, List<CheckBox>> _checkBoxesMap = [];
+
         public PowerSettingWindows()
         {
             InitializeComponent();
         }
 
-
-
-        private Dictionary<PowerEnum, List<CheckBox>> _checkBoxesMap = [];
         private void PowerSettingWindows_OnLoaded(object sender, RoutedEventArgs e)
         {
-            foreach (var pow in MainStorage.Saves.PowerTable)
+            EnsurePowerTable();
+            _checkBoxesMap.Clear();
+            PowerPanel.Children.Clear();
+
+            PowerPanel.Children.Add(new TextBlock
             {
-                if (typeof(PowerEnum).GetMember(pow.Key.ToString())[0].GetCustomAttribute<NotShowAttribute>() != null) continue;
-                _checkBoxesMap[pow.Key] = [];
-                StackPanel st = new StackPanel()
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 20, 0, 20),
+                Text = Properties.Resources.PermissionsSetting,
+                FontSize = 20
+            });
+
+            foreach (var power in Enum.GetValues<PowerEnum>())
+            {
+                if (typeof(PowerEnum).GetMember(power.ToString())[0].GetCustomAttribute<NotShowAttribute>() != null)
                 {
-                    // Orientation = Orientation.Horizontal,
+                    continue;
+                }
+
+                _checkBoxesMap[power] = [];
+
+                StackPanel container = new()
+                {
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
+
                 TextBlock powerText = new()
                 {
-                    Text = Utils.Utils.GetPowerName(pow.Key), // pow.Key.ToString(),
+                    Text = Utils.Utils.GetPowerName(power),
                     FontSize = 24,
                     Margin = new Thickness(0, 10, 0, 0)
                 };
-                StackPanel st1 = new StackPanel()
+
+                StackPanel rolePanel = new()
                 {
                     Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
 
-                foreach (var item in Enum.GetValues<RoleEnum>().SkipLast(1))
+                foreach (var role in VisibleRoles)
                 {
-                    CheckBox checkBox = new CheckBox()
+                    CheckBox checkBox = new()
                     {
-                        IsChecked = pow.Value[item],
-                        Content = Utils.Utils.GetRoleName(item)
+                        IsChecked = MainStorage.Saves.PowerTable[power].TryGetValue(role, out var isChecked) && isChecked,
+                        Content = Utils.Utils.GetRoleName(role),
+                        Margin = new Thickness(8, 0, 8, 0)
                     };
-                    _checkBoxesMap[pow.Key].Add(checkBox);
-                    st1.Children.Add(checkBox);
+
+                    _checkBoxesMap[power].Add(checkBox);
+                    rolePanel.Children.Add(checkBox);
                 }
 
-                //for (int i = 0; i < pow.Value.Count; i++)
-                //{
-                //    CheckBox checkBox = new CheckBox()
-                //    {
-                //        IsChecked = pow.Value[i],
-                //        Content = LoginHelper.GetPowerName(i + 1)
-                //    };
-                //    _checkBoxesMap[pow.Key].Add(checkBox);
-                //    st1.Children.Add(checkBox);
-                //}
-
-                st.Children.Add(powerText);
-                st.Children.Add(st1);
-                PowerPanel.Children.Add(st);
+                container.Children.Add(powerText);
+                container.Children.Add(rolePanel);
+                PowerPanel.Children.Add(container);
             }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            // 鏅�氬寲
-            var aa = Enum.GetValues<RoleEnum>().SkipLast(1).ToList();
+            EnsurePowerTable();
+
             foreach (var keyValuePair in _checkBoxesMap)
             {
-
-
                 for (var i = 0; i < keyValuePair.Value.Count; i++)
                 {
-                    MainStorage.Saves.PowerTable[keyValuePair.Key][aa[i]] = keyValuePair.Value[i].IsChecked ?? false;
+                    MainStorage.Saves.PowerTable[keyValuePair.Key][VisibleRoles[i]] = keyValuePair.Value[i].IsChecked ?? false;
                 }
             }
+
+            MainStorage.SaveManager.Save();
             Close();
+        }
+
+        private static void EnsurePowerTable()
+        {
+            foreach (var power in Enum.GetValues<PowerEnum>())
+            {
+                if (!MainStorage.Saves.PowerTable.ContainsKey(power))
+                {
+                    MainStorage.Saves.PowerTable[power] = [];
+                }
+
+                foreach (var role in Enum.GetValues<RoleEnum>())
+                {
+                    if (!MainStorage.Saves.PowerTable[power].ContainsKey(role))
+                    {
+                        MainStorage.Saves.PowerTable[power][role] = false;
+                    }
+                }
+            }
         }
     }
 }

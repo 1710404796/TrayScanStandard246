@@ -332,7 +332,7 @@ namespace TrayScanStandard
         /// <param name="e"></param>
         private void LightBtn_Click(object sender, RoutedEventArgs e)
         {
-            NageTo<LightSourceControlView>();
+            NageTo<LightManagerView>();
 
         }
 

@@ -32,7 +32,9 @@ namespace TrayScanStandard.Data.Models
         public int ChannelCount { get; set; } = 64;
 
         [NotMapped]
-        public int RealCount => BatteryInfo.Count(s => s.BatteryCode.Length > 0);
+        public int RealCount => BatteryInfo.Count(s =>
+            !string.IsNullOrWhiteSpace(s.BatteryCode)
+            && !s.BatteryCode.StartsWith("noread", StringComparison.CurrentCultureIgnoreCase));
 
         public DateTime ZuPanTime { get; set; } = DateTime.Now;
         public int Column { get; set; }

@@ -1,5 +1,6 @@
-ï»¿
+
 using MediatR;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,18 @@ using TrayScanStandard.ViewModel;
 namespace TrayScanStandard.View
 {
     /// <summary>
-    /// ImageDisplayView.xaml çš„äº¤äº’é€»è¾‘
+    /// ImageDisplayView.xaml µÄ½»»¥Âß¼­
     /// </summary>
     public partial class ImageDisplayView : Page
     {
         private IMediator _meditor;
+        private readonly ILogger _logger;
 
         public ImageDisplayViewModel ViewModel { get; }
         public ImageDisplayView(ImageDisplayViewModel viewModel)
         {
             _meditor = App.GetService<IMediator>();
+            _logger = Log.ForContext<ImageDisplayView>();
             ViewModel = viewModel;
             DataContext = this;
             InitializeComponent();
@@ -45,19 +48,32 @@ namespace TrayScanStandard.View
                 return;
             }
 
+            var battery = ViewModel.SelectBatteryInfo;
+            _logger.Information("ÊÖ¶¯É¨Âë¿ªÊ¼£ºµç³Ø={Battery}£¬Í¨µÀÊý={Count}",
+                $"{battery.Id}:{battery.TypeName}", battery.Count);
+
             btn.IsEnabled = false;
-            var res = await _meditor.Send(new DetectCCDCommand(ViewModel.SelectBatteryInfo));
+            var res = await _meditor.Send(new DetectCCDCommand(battery));
 
             await res.MatchAsync(
 
                 LeftAsync: async l =>
                 {
+                    _logger.Error("ÊÖ¶¯É¨ÂëÊ§°Ü£º{Error}", l);
                     await _meditor.Send(new WarningBoxCommand(l));
                     return LanguageExt.Unit.Default;
                 },
                 RightAsync: async r =>
                 {
-                    await _meditor.Send(new InformationBoxCommand("æ£€æµ‹å®Œæˆ"));
+                    var noreadCount = r.Channels.Count(c => c.Code == "noread");
+                    var okCount = r.Channels.Length - noreadCount;
+                    _logger.Information("ÊÖ¶¯É¨ÂëÍê³É£ºÍ¨µÀÊý={TotalCount}£¬³É¹¦={OkCount}£¬Î´Ê¶±ð={NoreadCount}",
+                        r.Channels.Length, okCount, noreadCount);
+                    if (r.Channels.All(c => c.Code == "noread") || r.Channels.Length == 0)
+                    {
+                        _logger.Warning("ÊÖ¶¯É¨Âë£ºÈ«²¿Í¨µÀÎ´Ê¶±ðµ½ÌõÂë (noread)");
+                    }
+                    await _meditor.Send(new InformationBoxCommand("¼ì²âÍê³É"));
                     return LanguageExt.Unit.Default;
 
                 }

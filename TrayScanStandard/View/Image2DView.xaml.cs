@@ -11,6 +11,7 @@ using System.Windows.Media;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
 using TrayScanStandard.Models;
+using TrayScanStandard.Utils;
 using TrayScanStandard.ViewModel;
 
 namespace TrayScanStandard.View
@@ -19,7 +20,7 @@ namespace TrayScanStandard.View
     /// Image2DView.xaml 的交互逻辑
     /// </summary>
     [PowerView(PowerEnum.扫码枪设置)]
-    public partial class Image2DView : UserControl
+    public partial class Image2DView : UserControl, IDisposable
     {
 
         public Image2DViewModel ViewModel { get; set; }
@@ -30,6 +31,10 @@ namespace TrayScanStandard.View
 
 
         Border _nowBorder;
+        private Border? _draggingBorder;
+        private Canvas? _dragCanvas;
+        private Point _dragStartMousePosition;
+        private Thickness _dragStartMargin;
 
 
         public Image2DView(Image2DViewModel image2DViewModel, bool hidden = false)
@@ -173,15 +178,35 @@ namespace TrayScanStandard.View
                 return;
             }
 
-            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].Clear();
-            //_context.SaveChanges();
-            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].AddRange(_rois.Select(s => s.Item2).ToList());
-            var cnt = ViewModel.LinxContext.SaveChanges();
+            try
+            {
+                var cameraIdx = ViewModel.CameraIdx;
+                if (cameraIdx < 1 || cameraIdx > ViewModel.SelectBattery.Regions.Count)
+                {
+                    MessageBox.Show($"相机索引 {cameraIdx} 超出范围 (1~{ViewModel.SelectBattery.Regions.Count})",
+                        "保存失败", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-            MainStorage.SelectBattery = ViewModel.SelectBattery;
-            
-            // 标记已保存
-            ViewModel.MarkAsSaved();
+                var regionList = ViewModel.SelectBattery.Regions[cameraIdx - 1];
+                regionList.Clear();
+                regionList.AddRange(_rois.Select(s => s.Item2).ToList());
+
+                var cnt = ViewModel.LinxContext.SaveChanges();
+
+                // 保存到JSON持久化文件
+                BatteryRoiJsonStore.SaveBattery(ViewModel.SelectBattery);
+
+                MainStorage.SelectBattery = ViewModel.SelectBattery;
+
+                // 标记已保存
+                ViewModel.MarkAsSaved();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SaveBtn] 保存ROI失败: {ex}");
+                MessageBox.Show($"保存失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -230,8 +255,8 @@ namespace TrayScanStandard.View
             {
                 BorderBrush = Brushes.Red,
                 BorderThickness = new Thickness(20),
-                Width = 600,
-                Height = 600,
+                Width = 200,
+                Height = 200,
                 Margin = new Thickness(100, 100, 100, 100),
                 Background = Brushes.Transparent,
                 Cursor = Cursors.Hand,
@@ -240,7 +265,8 @@ namespace TrayScanStandard.View
 
             border.MouseRightButtonDown += Border_MouseRightButtonDown;
             border.MouseRightButtonUp  += Border_MouseRightButtonUp;
-
+            border.MouseMove += Border_MouseMove;
+            border.LostMouseCapture += Border_LostMouseCapture;
             border.MouseLeftButtonDown += Border_MouseLeftButtonDown;
             TextBlock textBlock = new()
             {
@@ -264,22 +290,9 @@ namespace TrayScanStandard.View
             // 阻止事件冒泡到父级控件
             e.Handled = true;
 
-            if (_cancellationTokenSource is null)
-                return;
-            _cancellationTokenSource.Cancel();
-
-            var border = (sender as Border);
-            if (border?.Tag is BarCodeRegionInfo region)
+            if (sender is Border border)
             {
-                _nowBorder = border;
-                ViewModel.SelectBarCodeRegionInfo = region;
-
-                region.Top = (int)border.Margin.Top;
-                region.Left = (int)border.Margin.Left;
-                region.Width = (int)border.Width;
-                region.Height = (int)border.Height;
-
-                ViewModel.RefreshBarCodeRegionData();
+                EndBorderDrag(border);
             }
         }
         private static void UpdateBorderThickness(Border border)
@@ -300,82 +313,144 @@ namespace TrayScanStandard.View
 
         }
 
-        CancellationTokenSource _cancellationTokenSource;
-        CancellationToken _cancellationToken;
         private LinxContext _context;
 
-        private async void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 阻止事件冒泡到父级控件（防止影响大图拖动）
             e.Handled = true;
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            _cancellationToken = _cancellationTokenSource.Token;
-            Border? button = (sender as Border);
-
-            if (button == null) return;
-
-            // 获取相对于 Canvas 的初始位置
-            var canvas = button.Parent as Canvas;
-            if (canvas == null) return;
-
-            var initialPosition = e.GetPosition(canvas);
-            var initialMargin = button.Margin;
-
-            while (!_cancellationToken.IsCancellationRequested)
+            if (sender is not Border border || border.Parent is not Canvas canvas)
             {
-                try
-                {
-                    // 获取当前鼠标位置（相对于 Canvas）
-                    var p = e.GetPosition(button.Parent as Canvas);
-                    Debug.WriteLine(p);
-                    var mar = button.Margin;
-                    mar.Left = p.X - button.Width / 2;
-                    mar.Top = p.Y - button.Height / 2;
-                    button.Margin = mar;
-
-                    await Task.Delay(10, _cancellationToken);
-                }
-                catch (TaskCanceledException)
-                {
-                    break;
-                }
+                return;
             }
-        }        private async void TopBox_TextChanged(object sender, TextChangedEventArgs e)
+
+            _nowBorder = border;
+            ViewModel.SelectBarCodeRegionInfo = border.Tag as BarCodeRegionInfo;
+
+            _draggingBorder = border;
+            _dragCanvas = canvas;
+            _dragStartMousePosition = e.GetPosition(canvas);
+            _dragStartMargin = border.Margin;
+
+            border.CaptureMouse();
+        }
+
+        private void Border_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender is not Border border || _draggingBorder != border || _dragCanvas is null)
+            {
+                return;
+            }
+
+            if (e.RightButton != MouseButtonState.Pressed)
+            {
+                EndBorderDrag(border);
+                return;
+            }
+
+            var currentPosition = e.GetPosition(_dragCanvas);
+            var offset = currentPosition - _dragStartMousePosition;
+            var margin = _dragStartMargin;
+
+            margin.Left = Math.Max(0, margin.Left + offset.X);
+            margin.Top = Math.Max(0, margin.Top + offset.Y);
+
+            border.Margin = margin;
+        }
+
+        private void Border_LostMouseCapture(object sender, MouseEventArgs e)
+        {
+            if (sender is Border border && _draggingBorder == border)
+            {
+                EndBorderDrag(border, releaseCapture: false);
+            }
+        }
+
+        private void EndBorderDrag(Border border, bool releaseCapture = true)
+        {
+            if (_draggingBorder != border)
+            {
+                return;
+            }
+
+            if (releaseCapture && border.IsMouseCaptured)
+            {
+                border.ReleaseMouseCapture();
+            }
+
+            _draggingBorder = null;
+            _dragCanvas = null;
+
+            if (border.Tag is not BarCodeRegionInfo region)
+            {
+                return;
+            }
+
+            _nowBorder = border;
+            ViewModel.SelectBarCodeRegionInfo = region;
+
+            region.Top = (int)border.Margin.Top;
+            region.Left = (int)border.Margin.Left;
+            region.Width = (int)border.Width;
+            region.Height = (int)border.Height;
+
+            ViewModel.RefreshBarCodeRegionData();
+            ViewModel.MarkAsChanged();
+        }
+
+        private async void TopBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (ViewModel.SelectBarCodeRegionInfo is null)
             {
                 return;
             }
 
-            if (_nowBorder is null)
+            // 在 await 之前捕获所有需要的引用，防止 Unloaded 期间被清空导致 NRE
+            var border = _nowBorder;
+            var vm = ViewModel;
+            if (border is null)
             {
                 return;
-            }   
+            }
             await Task.Delay(20);
-            _nowBorder.Margin = new Thickness(ViewModel.SelectBarCodeRegionInfo.Left, ViewModel.SelectBarCodeRegionInfo.Top, 0, 0);
+            // 二次校验：view 可能已卸载，border 已从视觉树移除
+            if (_nowBorder != border || vm.SelectBarCodeRegionInfo is null)
+            {
+                return;
+            }
 
-            _nowBorder.Width = ViewModel.SelectBarCodeRegionInfo.Width;
-            _nowBorder.Height = ViewModel.SelectBarCodeRegionInfo.Height;
-            UpdateBorderThickness(_nowBorder);
-            
+            border.Margin = new Thickness(vm.SelectBarCodeRegionInfo.Left, vm.SelectBarCodeRegionInfo.Top, 0, 0);
+            border.Width = vm.SelectBarCodeRegionInfo.Width;
+            border.Height = vm.SelectBarCodeRegionInfo.Height;
+            UpdateBorderThickness(border);
+
             // 标记有未保存的修改
-            ViewModel.MarkAsChanged();
+            vm.MarkAsChanged();
         }        private async void ChannelBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (ViewModel.SelectBarCodeRegionInfo is null)
             {
                 return;
             }
-            if (_nowBorder is null)
+            // 在 await 之前捕获所有需要的引用，防止 Unloaded 期间被清空导致 NRE
+            var border = _nowBorder;
+            var vm = ViewModel;
+            if (border is null)
             {
                 return;
             }
             await Task.Delay(20);
-            (_nowBorder.Child as TextBlock).Text = ViewModel.SelectBarCodeRegionInfo.ChannelIdx.ToString();
-            
+            // 二次校验：view 可能已卸载，border 已从视觉树移除
+            if (_nowBorder != border || vm.SelectBarCodeRegionInfo is null)
+            {
+                return;
+            }
+
+            (border.Child as TextBlock).Text = vm.SelectBarCodeRegionInfo.ChannelIdx.ToString();
+
             // 标记有未保存的修改
-            ViewModel.MarkAsChanged();
+            vm.MarkAsChanged();
         }private void Delete_Border_Click(object sender, RoutedEventArgs e)
         {
             DeleteBorder(_nowBorder);
@@ -414,6 +489,8 @@ namespace TrayScanStandard.View
 
             border.MouseRightButtonDown -= Border_MouseRightButtonDown;
             border.MouseRightButtonUp -= Border_MouseRightButtonUp;
+            border.MouseMove -= Border_MouseMove;
+            border.LostMouseCapture -= Border_LostMouseCapture;
             border.MouseLeftButtonDown -= Border_MouseLeftButtonDown;
             _rois.Remove(_rois.Find(s => s.Item1 == border));
 
@@ -421,6 +498,9 @@ namespace TrayScanStandard.View
         
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
+            // 如果已通过 Dispose() 清理过，跳过重复处理
+            if (_disposed) return;
+
             // 检查是否有未保存的修改
             if (ViewModel.HasUnsavedChanges)
             {
@@ -448,24 +528,39 @@ namespace TrayScanStandard.View
                 ViewModel.MarkAsSaved(); // 标记为已保存，避免重复提示
                 // 如果选择No，则不保存，直接离开
             }
-            img2d.Source = null!;
-            img2d.BorderCanvas.Children.Clear();
-            img2d.ResultCanvas.Children.Clear();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
 
-
-            //foreach (var item in _rois)
-            //{
-            //    DeleteBorder(item.Item1);
-            //}
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
-            _rois.Clear();
-            _nowBorder = null!;
-
+            // 1. 先取消 ViewModel 事件订阅，防止后续 ColorUpdate/ResultUpdate 触发 Dispatcher.Invoke 访问已清理的控件
             ViewModel.ColorUpdate -= ViewModel_ColorUpdate;
             ViewModel.ResultUpdate -= ViewModel_ResultUpdate;
+
+            // 2. 释放图片资源
+            img2d.Source = null!;
+
+            // 3. 清理所有 Border 的事件处理（必须在 _rois 清空和 Canvas.Clear 之前完成）
+            foreach (var (border, _) in _rois)
+            {
+                if (border != null)
+                {
+                    border.MouseRightButtonDown -= Border_MouseRightButtonDown;
+                    border.MouseRightButtonUp -= Border_MouseRightButtonUp;
+                    border.MouseMove -= Border_MouseMove;
+                    border.LostMouseCapture -= Border_LostMouseCapture;
+                    border.MouseLeftButtonDown -= Border_MouseLeftButtonDown;
+                }
+            }
+            img2d.BorderCanvas.Children.Clear();
+            img2d.ResultCanvas.Children.Clear();
+
+            // 4. 清空所有字段引用，使对象可被正常 GC
+            _draggingBorder = null;
+            _dragCanvas = null;
+            _nowBorder = null!;
+            _rois.Clear();
+            resultRects.Clear();
+            codes.Clear();
+
+            // 注意：已移除 GC.Collect() 和 GC.WaitForPendingFinalizers()，
+            // 它们会阻塞 UI 线程且有引发死锁的风险。当前所有引用已断开，交由自然 GC 回收即可。
         }
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
@@ -522,19 +617,50 @@ namespace TrayScanStandard.View
             ViewModel.MarkAsChanged();
         }
 
-        // In Image2DView class (if it contains images)
+        private bool _disposed = false;
+
         public void Dispose()
         {
-            // Clear any image sources
+            if (_disposed) return;
+            _disposed = true;
+
+            // 取消 ViewModel 事件订阅
+            if (ViewModel != null)
+            {
+                ViewModel.ColorUpdate -= ViewModel_ColorUpdate;
+                ViewModel.ResultUpdate -= ViewModel_ResultUpdate;
+            }
+
+            // 清理所有 Border 事件
+            foreach (var (border, _) in _rois)
+            {
+                if (border != null)
+                {
+                    border.MouseRightButtonDown -= Border_MouseRightButtonDown;
+                    border.MouseRightButtonUp -= Border_MouseRightButtonUp;
+                    border.MouseMove -= Border_MouseMove;
+                    border.LostMouseCapture -= Border_LostMouseCapture;
+                    border.MouseLeftButtonDown -= Border_MouseLeftButtonDown;
+                }
+            }
+
+            // 释放图片资源
             if (img2d != null)
             {
                 img2d.Source = null;
+                img2d.BorderCanvas.Children.Clear();
+                img2d.ResultCanvas.Children.Clear();
             }
-            
-            // Remove event handlers
-            // ...
-            
-            // Clear references to viewmodels
+
+            // 清空字段引用
+            _draggingBorder = null;
+            _dragCanvas = null;
+            _nowBorder = null!;
+            _rois.Clear();
+            resultRects.Clear();
+            codes.Clear();
+
+            // 清除数据上下文绑定
             DataContext = null;
         }
     }

@@ -59,7 +59,7 @@
                         VerticalAlignment="Center"
                         Margin="0,5,100,5"
                         Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
-            <TextBlock VerticalAlignment="Center" 
+            <!--<TextBlock VerticalAlignment="Center" 
                         FontSize="15" 
                         Text="WCS连接状态:"
                         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
@@ -67,7 +67,7 @@
                         VerticalAlignment="Center" 
                         FontWeight="Bold" 
                         Foreground="{Binding ViewModel.WcsColor}" 
-                        Margin="10,0,10,0"/>
+                        Margin="10,0,10,0"/>-->
 
             <TextBlock VerticalAlignment="Center" 
                         FontSize="15" 

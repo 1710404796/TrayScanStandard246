@@ -1,4 +1,4 @@
-﻿global using LanguageExt;
+global using LanguageExt;
 global using static LanguageExt.Prelude;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
 using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -27,6 +29,7 @@ using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
 using TrayScanStandard.ViewModel.CZPallet;
+using TrayScanStandard.Utils;
 using VMWebAIClient;
 
 namespace TrayScanStandard
@@ -70,9 +73,14 @@ namespace TrayScanStandard
             }
 
 
-            //Bitmap bitmap = new Bitmap(@"D:\testImg\20250911202510-800_0_0.png");
-            //Bitmap bitmap1 = new Bitmap(@"D:\testImg\right.png");
-            //Bitmap bitmap2 = new Bitmap(@"D:\testImg\20251217195709-132_0_0.png");
+                        // 提前初始化文件日志，确保 InitCST 等启动日志能被记录（此时还未获取 RichTextBox，仅写文件）
+            Log.Logger = new LoggerConfiguration()
+              .MinimumLevel.Debug()
+              .MinimumLevel.Override("System.Net.Http.HttpClient", Serilog.Events.LogEventLevel.Warning)
+              .MinimumLevel.Override("Quartz", Serilog.Events.LogEventLevel.Information)
+              .MinimumLevel.Override("Microsoft.Extensions.Http", Serilog.Events.LogEventLevel.Information)
+              .CreateLogger();
+
             MainStorage.Init();
             //if (MainStorage.Saves.Stage == null)
             //{
@@ -103,13 +111,14 @@ namespace TrayScanStandard
                                  trigger.ForJob(jobKey1).WithCronSchedule("0 10 * * * ?");
                              });
 
-                             JobKey heartbeatJobKey = JobKey.Create(nameof(HeartbeatJobs));
-                             config.AddJob<HeartbeatJobs>(heartbeatJobKey).AddTrigger(trigger =>
-                             {
-                                 trigger.ForJob(heartbeatJobKey)
-                                     .StartNow()
-                                     .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever());
-                             });
+                             // 【已移除心跳】
+                             // JobKey heartbeatJobKey = JobKey.Create(nameof(HeartbeatJobs));
+                             // config.AddJob<HeartbeatJobs>(heartbeatJobKey).AddTrigger(trigger =>
+                             // {
+                             //     trigger.ForJob(heartbeatJobKey)
+                             //         .StartNow()
+                             //         .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever());
+                             // });
 
                          });
 
@@ -146,9 +155,6 @@ namespace TrayScanStandard
                          services.AddTransient<LightManagerView>();
                          services.AddTransient<LightManagerViewModel>();
 
-                         services.AddTransient<LightSourceControlView>();
-                         services.AddTransient<LightSourceControlViewModel>();
-
                          // 光源服务（Wordop 使用单例 + 启动自动连接）
                          services.AddSingleton<WordopLightService>();
                          services.AddSingleton<CognexLightService>();
@@ -169,9 +175,9 @@ namespace TrayScanStandard
 
                          services.AddSingleton<ScanCameraService>();
                          services.AddSingleton<WcsTrayScanStandardServer>();
-                         services.AddSingleton<PlcModbusHealthService>();
+                        services.AddSingleton<PlcModbusHealthService>();
 
-                         services.AddTransient<StationSettingView>();
+                        services.AddTransient<StationSettingView>();
 
 
                          // 注入光源CST服务
@@ -280,14 +286,10 @@ namespace TrayScanStandard
             {
                 GetService<ScanCameraService>().Init();
                 logger.LogInformation("启动初始化：已触发相机自动连接");
-
-                var lightViewModel = GetService<LightSourceControlViewModel>();
-                lightViewModel.ConnectCommand.Execute(null);
-                logger.LogInformation("启动初始化：已触发光源自动连接");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "启动初始化：设备自动连接触发失败");
+                logger.LogError(ex, "启动初始化：相机自动连接触发失败");
             }
         }
         static ProcessManager manager;
@@ -296,6 +298,7 @@ namespace TrayScanStandard
             LinxContext DB = GetService<LinxContext>();
             // DB.Database.EnsureCreated();
             DB.Database.Migrate();
+            BatteryRoiJsonStore.SyncToDatabase(DB);
             //
             //foreach (var batteryInfo in DB.BatteryInfos.ToList())
             //{

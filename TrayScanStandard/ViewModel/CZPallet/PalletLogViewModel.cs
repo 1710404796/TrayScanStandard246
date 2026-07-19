@@ -1,45 +1,137 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using LinxUniverse.Utils;
 using Microsoft.EntityFrameworkCore;
 using TrayScanStandard.Data;
 using TrayScanStandard.Data.Models;
+using TrayScanStandard.Messages;
 using TrayScanStandard.Models.CZPallet;
 
 namespace TrayScanStandard.ViewModel.CZPallet
 {
-    public partial class PalletLogViewModel(LinxContext context) : ObservableRecipient
+    public partial class PalletLogViewModel : ObservableRecipient
     {
+        private readonly LinxContext context;
+
         //public ObservableCollection<PalletLogViewModel> Log { get; set; } = [];
         [ObservableProperty] private ObservableCollection<PalletLogExt> _palletLogs = [];
-        private IEnumerable<PalletLog> _logs = [];
+        [ObservableProperty] private bool? _isAllSelected = false;
         public DateTime StartTime { get; set; } = DateTime.Today.AddDays(-30);
         public DateTime EndTime { get; set; } = DateTime.Today.AddDays(1);
 
         public string Code { get; set; } = string.Empty;
-        public int LogNum { get; set; } = 100;
+        private bool _isUpdatingSelectionState;
+
+        public PalletLogViewModel(LinxContext context)
+        {
+            this.context = context;
+            WeakReferenceMessenger.Default.Register<PalletLogCreatedMessage>(this, (r, m) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var ext = new PalletLogExt(m.Value);
+                    ext.PropertyChanged += PalletLog_PropertyChanged;
+                    PalletLogs.Insert(0, ext);
+                });
+            });
+        }
 
 
         public void RefreshContext()
         {
-            _logs = context
-                .PalletLogs.AsNoTracking()
-                .OrderByDescending(s => s.Id)
-                .Where(s => s.PalletType == PalletType.组盘).Take(LogNum).ToArray();
             Search();
+        }
+
+        partial void OnIsAllSelectedChanged(bool? value)
+        {
+            if (_isUpdatingSelectionState || value is null)
+            {
+                return;
+            }
+
+            SetAllSelections(value.Value);
         }
 
         public bool IsNowLog(WarningLog log)
         {
 
             return log.WarningTime >= StartTime && log.WarningTime <= EndTime;
+        }
+
+        private void SetAllSelections(bool isSelected)
+        {
+            if (PalletLogs.Count == 0)
+            {
+                return;
+            }
+
+            _isUpdatingSelectionState = true;
+            try
+            {
+                foreach (var log in PalletLogs)
+                {
+                    log.IsSelect = isSelected;
+                }
+            }
+            finally
+            {
+                _isUpdatingSelectionState = false;
+            }
+
+            UpdateSelectAllState();
+        }
+
+        private void ReplacePalletLogs(IEnumerable<PalletLogExt> logs)
+        {
+            foreach (var log in PalletLogs)
+            {
+                log.PropertyChanged -= PalletLog_PropertyChanged;
+            }
+
+            PalletLogs = new ObservableCollection<PalletLogExt>(logs);
+
+            foreach (var log in PalletLogs)
+            {
+                log.PropertyChanged += PalletLog_PropertyChanged;
+            }
+
+            UpdateSelectAllState();
+        }
+
+        private void PalletLog_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PalletLogExt.IsSelect))
+            {
+                UpdateSelectAllState();
+            }
+        }
+
+        private void UpdateSelectAllState()
+        {
+            _isUpdatingSelectionState = true;
+            try
+            {
+                IsAllSelected = PalletLogs.Count switch
+                {
+                    0 => false,
+                    _ when PalletLogs.All(s => s.IsSelect) => true,
+                    _ when PalletLogs.All(s => !s.IsSelect) => false,
+                    _ => null
+                };
+            }
+            finally
+            {
+                _isUpdatingSelectionState = false;
+            }
         }
 
         [RelayCommand]
@@ -85,21 +177,22 @@ namespace TrayScanStandard.ViewModel.CZPallet
         [RelayCommand]
         public void Search()
         {
+            IQueryable<PalletLog> afterFilter;
             lock (context)
             {
-                _logs = context.PalletLogs.AsNoTracking().Where(s => s.PalletType == PalletType.组盘).OrderByDescending(s => s.Id);
-
+                afterFilter = context.PalletLogs
+                    .AsNoTracking()
+                    .Where(s => s.PalletType == PalletType.组盘)
+                    .Where(s => s.ZuPanTime >= StartTime && s.ZuPanTime <= EndTime)
+                    .OrderByDescending(s => s.Id);
             }
-            var afterFilter = _logs.Where(s => s.ZuPanTime >= StartTime && s.ZuPanTime <= EndTime);
 
             if (!string.IsNullOrEmpty(Code))
             {
                 afterFilter = afterFilter.Where(s => s.PalletCode.Contains(Code, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            PalletLogs = new(
-                 afterFilter.Take(LogNum).Select(s => new PalletLogExt(s))
-             );
+            ReplacePalletLogs(afterFilter.Select(s => new PalletLogExt(s)));
         }
     }
 }

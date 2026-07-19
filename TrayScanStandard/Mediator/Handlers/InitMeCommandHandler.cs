@@ -1,8 +1,7 @@
-﻿using Humanizer;
+using Humanizer;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.DI;
-using LinxUniverse.PLCProtos;
 using LinxUniverse.Utils;
 using LinxUniverse.VM;
 using MediatR;
@@ -37,7 +36,6 @@ namespace TrayScanStandard.Mediator.Handlers
         ILogger<InitMeCommandHandler> logger,
         RoleManager<LinxRole, LinxUser> role, 
         ScanCameraService scanCameraService,
-        PLCTaskService<TrayScanStandardCCDContext> pLCTaskService,
         WcsTrayScanStandardServer  wcsTrayScanStandardServer,
         PlcModbusHealthService plcModbusHealthService,
         LinxContext linxContext,
@@ -64,20 +62,18 @@ namespace TrayScanStandard.Mediator.Handlers
                 // 初始化角色
                 await InitializeRoles(cancellationToken);
 
-                // 初始化扫描相机服务
-                scanCameraService.Init();
-
-                // 自动连接Wordop光源
-                await TryAutoConnectWordopAsync(mediator, logger, wordopLightService, cancellationToken);
-
                 // 初始化光源设备
                 var lightInitializationResult = await InitializeLights(cancellationToken);
                 if (!lightInitializationResult.IsSuccess)
                 {
-                    logger.LogError(lightInitializationResult.ErrorMessage);
-                    MessageBox.Show(lightInitializationResult.ErrorMessage, "光源初始化失败", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    logger.LogWarning("光源初始化失败，继续启动（拍照时将跳过光源控制）: {Message}", lightInitializationResult.ErrorMessage);
                 }
+
+                // 自动连接Wordop光源
+                await TryAutoConnectWordopAsync(mediator, logger, wordopLightService, cancellationToken);
+
+                // 初始化扫描相机服务
+                scanCameraService.Init();
 
                 // 初始化算法
                 var algoInitializationResult = await InitializeAlgorithms(cancellationToken);
@@ -88,8 +84,6 @@ namespace TrayScanStandard.Mediator.Handlers
                     return;
                 }
 
-                // 原逻辑（保留）：
-                 await pLCTaskService.Init(new LinxUniverse.PLC.Meditor.Commands.S7CreatePlcCommand(S7.Net.CpuType.S71200, MainStorage.Saves.PlcIp, 0, 1), cacheService.Token);
 
                 // 触发WCS Socket服务在启动阶段初始化（构造函数内部已完成连接）
                 _ = wcsTrayScanStandardServer;
@@ -112,7 +106,10 @@ namespace TrayScanStandard.Mediator.Handlers
                 });
 
 
-                logger.LogInformation("所有初始化步骤完成");
+                if (MainStorage.Saves.LightInfos.Length > 0)
+                {
+                    logger.LogInformation("所有初始化步骤完成");
+                }
             }
             catch (Exception ex)
             {
@@ -154,6 +151,14 @@ namespace TrayScanStandard.Mediator.Handlers
         {
             try
             {
+                // MainStorage.InitCST() 已在 App 构造函数中执行过。
+                // 如果 MainStorage.CST 已有已连接的光源，则跳过重复连接，避免串口占用冲突。
+                if (MainStorage.CST.Any())
+                {
+                    logger.LogInformation("MainStorage.CST 已有已连接的光源，跳过重复初始化");
+                    return (true, "");
+                }
+
                 MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
                     async s =>
                     {
@@ -161,7 +166,7 @@ namespace TrayScanStandard.Mediator.Handlers
                         Enum.TryParse<SerialPortType>(s.Com, out var com);
 
                         // 发送命令创建光源对象，并获取ComID
-                        var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
+                        var g = await mediator.Send(new CreateCSTLightCommand(Com: com, ControllerType: Enum.Parse<LightControllerType>(s.ControllerType)));
 
                         // 查询并返回完整的灯光信息
                         return await mediator.Send(new GetLightQuery(g));
@@ -186,7 +191,7 @@ namespace TrayScanStandard.Mediator.Handlers
             try
             {
                 // 这里应该使用配置文件或常量来指定sol文件路径，而不是硬编码
-                var solutionPath = Path.Combine(FilenameHelper.AppPath, "solution.sol"); // 更好的默认路径
+                var solutionPath = Path.Combine(FilenameHelper.AppPath, "test.sol"); // 更好的默认路径
                 var algores = await vmWebAIClient.CreateAlgoAsync(solutionPath, LinxUniverse.Algo.Common.DetectType.VisionMaster);
 
                 // 检查各个算法初始化结果

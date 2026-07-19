@@ -1,4 +1,4 @@
-﻿using Camera.Fs.Common;
+using Camera.Fs.Common;
 using HKCamera.Fs.NET;
 using LanguageExt.Common;
 using LinxUniverse.Algo.Common;
@@ -17,17 +17,18 @@ using System.Windows.Threading;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Mediator.Queries;
 using TrayScanStandard.Service;
+using TrayScanStandard.Utils;
 using TrayScanStandard.ViewModel;
 using VMWebAIClient;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
-    internal class DetectCCDCommandHander
-        (ScanCameraService scanCameraService, 
-        ILogger<ScanCameraService> logger, 
-        IMediator mediator,
-        IVMWebAIClient vMWebAIClient,
-        ImageDisplayViewModel imageDisplayViewModel): IRequestHandler<DetectCCDCommand, Either<string, DetectResult>>
+internal class DetectCCDCommandHander
+    (ScanCameraService scanCameraService, 
+    ILogger<ScanCameraService> logger, 
+    IMediator mediator,
+    IVMWebAIClient vMWebAIClient,
+    ImageDisplayViewModel imageDisplayViewModel): IRequestHandler<DetectCCDCommand, Either<string, DetectResult>>
     // 这个就是默认全部的
     {
         public async Task<Either<string, DetectResult>> Handle(DetectCCDCommand request, CancellationToken cancellationToken)
@@ -88,7 +89,7 @@ namespace TrayScanStandard.Mediator.Handlers
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
                         camImgs
-                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCount))
+                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
                         .Map(
                             imgs => imgs.Item1
                                 .Map(s =>
@@ -129,6 +130,43 @@ namespace TrayScanStandard.Mediator.Handlers
                         d.Item2.TempResult = new CodeDetectResult(d.Item1.ToArr());
                     })
             );
+            // 将解码失败的ROI标记绘制到图片文件上，方便查看未识别位置
+            dataFilenames.IfRight(filenames =>
+            {
+                var imgPaths = filenames.Select(cam => cam.FirstOrDefault()).ToArray();
+                res.Iter(detectResults =>
+                {
+                    var detectArray = detectResults.ToArray();
+                    for (int camIdx = 0; camIdx < imgPaths.Length && camIdx < detectArray.Length; camIdx++)
+                    {
+                        var imgPath = imgPaths[camIdx];
+                        if (string.IsNullOrEmpty(imgPath) || !File.Exists(imgPath))
+                            continue;
+
+                        if (camIdx >= scanCameraService.Image2DViewModels.Length)
+                            continue;
+
+                        var vm = scanCameraService.Image2DViewModels[camIdx];
+                        if (vm.tempImg == null || vm.tempImg.Length == 0)
+                            continue;
+
+                        if (camIdx >= request.BatteryTypeInfo.Regions.Count)
+                            continue;
+
+                        var rois = request.BatteryTypeInfo.Regions[camIdx]
+                            .Select(r => r.ToROI())
+                            .ToArray();
+                        if (rois.Length == 0)
+                            continue;
+
+                        RoiOverlayImageWriter.WriteFailedRois(
+                            imgPath, vm.tempImg, rois, detectArray[camIdx].AsEnumerable());
+
+                        vm.tempImg = File.ReadAllBytes(imgPath);
+                    }
+                });
+            });
+
             logger.LogInformation("推送完成 获取结果");
 
             var res1 = res.Map(r =>
@@ -198,26 +236,44 @@ namespace TrayScanStandard.Mediator.Handlers
 
             // 清空一下？
             imageDisplayViewModel.XYLStation.ClearStage();
-            logger.LogInformation("清空数据，推送新数据");
-            //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
-            res1.Iter(s =>
-                s.Channels.Iter
-                    (async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
-                    )
-             );
-            //));
+           logger.LogInformation("清空数据，推送新数据");
+
+            // 无论是解码失败还是没拍到条码，都给虚拟界面传输 noread
+            var channelCount = request.BatteryTypeInfo.Count;
+            res1.Match(
+                Right: s =>
+                {
+                    var decodedIndices = new System.Collections.Generic.HashSet<int>(s.Channels.Select(c => c.Index));
+
+                    // 绑定已解码成功的条码
+                    s.Channels.Iter(async c =>
+                        await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
+                    );
+
+                    // 对未解码的通道显示 "noread"
+                    for (int i = 0; i < channelCount; i++)
+                    {
+                        int channelIdx = i + 1;
+                        if (!decodedIndices.Contains(channelIdx))
+                        {
+                            imageDisplayViewModel.XYLStation.BindBattery(i, "noread", true, Models.BatteryLevel.NG);
+                        }
+                    }
+                },
+                Left: _ =>
+                {
+                    // 拍照/解码失败，所有通道显示 noread
+                    for (int i = 0; i < channelCount; i++)
+                    {
+                        imageDisplayViewModel.XYLStation.BindBattery(i, "noread", true, Models.BatteryLevel.NG);
+                    }
+                }
+            );
             logger.LogInformation("返回数据");
             foreach (var item in scanCameraService.Image2DViewModels)
             {
                 item.Update();
             }
-            //dataFilenames.IfRight(f =>
-            //{
-            //    var d = f.Select(s => s.First());
-
-            //    mediator.Send(new PushImgCommand(d.ToArray()));
-
-            //});
             return res1;
             //).Traverse(s => s)
             //    ));

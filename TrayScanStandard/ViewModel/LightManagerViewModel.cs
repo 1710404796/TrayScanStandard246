@@ -39,6 +39,12 @@ namespace TrayScanStandard.ViewModel
         private string _newComPort = string.Empty; 
 
         /// <summary>
+        /// 新增控制器类型
+        /// </summary>
+        [ObservableProperty]
+        private string _newControllerType = "Wordop";
+
+        /// <summary>
         /// 逗号分隔值输入
         /// </summary>
         [ObservableProperty]
@@ -57,6 +63,12 @@ namespace TrayScanStandard.ViewModel
         private string _editComPort = string.Empty;  
 
         /// <summary>
+        /// 编辑控制器类型
+        /// </summary>
+        [ObservableProperty]
+        private string _editControllerType = string.Empty;
+
+        /// <summary>
         /// 编辑逗号分隔值输入
         /// </summary>
         [ObservableProperty]
@@ -73,6 +85,11 @@ namespace TrayScanStandard.ViewModel
         /// </summary>
         [ObservableProperty]
         private bool _isEditMode = false;       
+
+        /// <summary>
+        /// 可用的控制器类型列表
+        /// </summary>
+        public string[] AvailableControllerTypes { get; } = new[] { "Wordop", "Cognex" };
 
         // 构造函数 - 假设WcsSaves通过依赖注入（DI）实现或通过静态获取，
         // 请根据实际依赖注入配置进行相应调整
@@ -127,10 +144,12 @@ namespace TrayScanStandard.ViewModel
 
             try
             {
-                // 将逗号分隔字符串解析为整数数组
-                int[] values = NewValuesString.Split(',')
-                                              .Select(s => int.Parse(s.Trim()))
-                                              .ToArray();
+        // 将逗号分隔字符串解析为整数数组
+        int[] values = NewValuesString.Split(',')
+                                      .Select(s => int.Parse(s.Trim()))
+                                      .ToArray();
+                // 解析控制器类型
+                string controllerType = string.IsNullOrWhiteSpace(NewControllerType) ? "Wordop" : NewControllerType;
                 
                 if (values.Length == 0)
                 {
@@ -145,11 +164,12 @@ namespace TrayScanStandard.ViewModel
                     return;
                 }
 
-                var newLightInfo = new LightInfo(NewComPort, values);
+                var newLightInfo = new LightInfo(NewComPort, values, controllerType);
                 LightInfos.Add(new LightInfoViewModel(newLightInfo));
 
                 // 清除输入字段
                 NewComPort = string.Empty;
+                NewControllerType = "Wordop";
                 NewValuesString = string.Empty;
                 ErrorMessage = string.Empty;
                 SaveChanges();
@@ -193,10 +213,12 @@ namespace TrayScanStandard.ViewModel
 
             try
             {
-                // 将逗号分隔字符串解析为整数数组
-                int[] values = EditValuesString.Split(',')
-                                               .Select(s => int.Parse(s.Trim()))
-                                               .ToArray();
+        // 将逗号分隔字符串解析为整数数组
+        int[] values = EditValuesString.Split(',')
+                                       .Select(s => int.Parse(s.Trim()))
+                                       .ToArray();
+                // 解析控制器类型
+                string controllerType = string.IsNullOrWhiteSpace(EditControllerType) ? "Wordop" : EditControllerType;
                 
                 if (values.Length == 0)
                 {
@@ -214,6 +236,7 @@ namespace TrayScanStandard.ViewModel
 
                 // 更新所选项目
                 SelectedLightInfo.Com = EditComPort;
+                SelectedLightInfo.ControllerType = controllerType;
                 SelectedLightInfo.Values = values;
                 var a = SelectedLightInfo;
                 // 强制刷新更新后的项目用户界面
@@ -264,6 +287,7 @@ namespace TrayScanStandard.ViewModel
             {
                 // 加载所选灯光的数值以编辑字段
                 EditComPort = value.Com;
+                EditControllerType = value.ControllerType;
                 EditValuesString = value.ValuesString;
             }
         }
@@ -285,10 +309,16 @@ namespace TrayScanStandard.ViewModel
     public partial class LightInfoViewModel : ObservableObject
     {
         /// <summary>
-        /// 串口号
+        /// 端口号
         /// </summary>
         [ObservableProperty]
         private string _com;
+
+        /// <summary>
+        /// 控制器类型（Wordop / Cognex）
+        /// </summary>
+        [ObservableProperty]
+        private string _controllerType;
 
         /// <summary>
         /// 亮度值
@@ -302,10 +332,11 @@ namespace TrayScanStandard.ViewModel
         public LightInfoViewModel(LightInfo model)
         {
             _com = model.Com;
+            _controllerType = model.ControllerType;
             _values = model.Values;
         }
 
-        public LightInfo ToModel() => new LightInfo(Com, Values);
+        public LightInfo ToModel() => new LightInfo(Com, Values, ControllerType);
 
         // 如有需要，可覆盖 `对外部对象` 以在列表中获得更佳显示效果；不过，`DataGrid` 的列显示效果更为理想。
         public override string ToString() => $"COM: {Com}, Values: {ValuesString}";

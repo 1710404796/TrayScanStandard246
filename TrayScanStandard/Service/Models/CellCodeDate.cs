@@ -14,16 +14,7 @@ namespace TrayScanStandard.Service.Models
 
         public string SystemCode { get; set; } = MainStorage.Saves.SystemCode;
 
-        public List<CellData> Data { get; set; } = [];
-
-        public sealed class CellData
-        {
-            public string CellCode { get; set; }
-
-            public string CcdCode { get; set; }
-
-            public int Channel { get; set; }
-        }
+        public List<List<object>> Data { get; set; } = [];
     }
 
     public sealed class CellCodeDateResponse : IWcsResponse

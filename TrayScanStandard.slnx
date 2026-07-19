@@ -3,9 +3,9 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="../HBYWCZP236/lxuv/LinxUniverse.PLC/LinxUniverse.PLC.csproj" />
-  <Project Path="../HBYWCZP236/lxuv/LinxUniverse.PLCProtos/LinxUniverse.PLCProtos.csproj" />
-  <Project Path="../HBYWCZP236/lxuv/LinxUniverse.SciSocket/LinxUniverse.SciSocket.csproj" />
+  <Project Path="lxuv/LinxUniverse.PLC/LinxUniverse.PLC.csproj" />
+  <Project Path="lxuv/LinxUniverse.PLCProtos/LinxUniverse.PLCProtos.csproj" />
+  <Project Path="lxuv/LinxUniverse.SciSocket/LinxUniverse.SciSocket.csproj" />
   <Project Path="lxuv/Camera.Fs.Common/Camera.Fs.Common.csproj" />
   <Project Path="lxuv/HKCamera.Fs.NET/HKCamera.Fs.NET.csproj" />
   <Project Path="lxuv/HuaRui.Fs.NET/HuaRui.Fs.NET.csproj" />

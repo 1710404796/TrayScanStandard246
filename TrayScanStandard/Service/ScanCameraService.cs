@@ -1,4 +1,4 @@
-﻿using HKCamera.Fs.NET;
+using HKCamera.Fs.NET;
 using HKCamera.Fs.NET.Controls;
 using LanguageExt;
 using LinxUniverse.DI;
@@ -38,11 +38,22 @@ namespace TrayScanStandard.Service
 
                 // 遍历以确保所有相机已连接
                 var settings = MainStorage.Saves.ConnectAddresses
-                    .Take(MainStorage.Saves.CameraCount)
+                    .Take(MainStorage.Saves.CameraCnt)
                     .ToArray();
                 logger.LogInformation($"开始初始化相机，目标数量: {settings.Length}");
                 var cameras = settings
-                    .Select((setting, index) => InitCameraWithLog(setting, index + 1, "startup"))
+                    .Select((setting, index) =>
+                    {
+                        // 如果已有有效连接，跳过重复初始化
+                        if (index < MugenCameras.Length && MugenCameras[index].IsSome)
+                        {
+                            logger.LogInformation($"相机[{index + 1}]已连接，跳过重复初始化");
+                            return MugenCameras[index].Match(
+                                Some: cam => Right<string, MugenCamera.MugenCamera>(cam),
+                                None: () => InitCameraWithLog(setting, index + 1, "startup"));
+                        }
+                        return InitCameraWithLog(setting, index + 1, "startup");
+                    })
                     .ToArray();
                 //MugenCameras = cameras.Match
                 MugenCameras = [.. cameras.Map(c => c.ToOption())];
@@ -71,7 +82,7 @@ namespace TrayScanStandard.Service
         {
             lock (_initLock)
             {
-                if (cameraIdx <= 0 || cameraIdx > MainStorage.Saves.CameraCount)
+                if (cameraIdx <= 0 || cameraIdx > MainStorage.Saves.CameraCnt)
                 {
                     return Left($"相机索引越界: {cameraIdx}");
                 }
@@ -88,6 +99,8 @@ namespace TrayScanStandard.Service
                 //    return Left($"相机[{cameraIdx}]当前类型不支持重连，仅支持海康/华睿");
                 //}
 
+                // 释放旧相机句柄后重连，避免SDK报-101错误
+                MugenCameras[arrayIdx].Iter(cam => cam.Destroy());
                 var result = InitCameraWithLog(setting, cameraIdx, "manual_reconnect");
                 return result.Match(
                     Right: camera =>
@@ -184,6 +197,8 @@ namespace TrayScanStandard.Service
                             else
                             {
                                 logger.LogWarning($"相机[{i + 1}]已断开，尝试重连");
+                                // 销毁旧相机句柄释放SDK资源，避免重连报MV_E_CALLORDER(-101)错误
+                                camera.Destroy();
                                 return InitCameraWithLog(address, i + 1, "reconnect");
                             }
                         },
@@ -237,7 +252,10 @@ namespace TrayScanStandard.Service
                 },
                 Left: error =>
                 {
-                    logger.LogWarning($"相机[{cameraIdx}]连接失败，错误: {error}",string.IsNullOrWhiteSpace(addressText) ? "<empty>" : addressText, error);
+                    if (!string.IsNullOrWhiteSpace(addressText))
+                    {
+                        logger.LogWarning($"相机[{cameraIdx}]连接失败，错误: {error}",string.IsNullOrWhiteSpace(addressText) ? "<empty>" : addressText, error);
+                    }
                     return 0;
                 });
 

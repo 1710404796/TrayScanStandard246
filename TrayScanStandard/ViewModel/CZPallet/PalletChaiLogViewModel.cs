@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,10 @@ using TrayScanStandard.Models.CZPallet;
 
 namespace TrayScanStandard.ViewModel.CZPallet
 {
-    public class PalletLogExt : PalletLog
+    public class PalletLogExt : PalletLog, INotifyPropertyChanged
     {
+        private bool _isSelect;
+
         public PalletLogExt(PalletLog log)
         {
             BatteryInfo = log.BatteryInfo;
@@ -27,7 +30,23 @@ namespace TrayScanStandard.ViewModel.CZPallet
             Column = log.Column;
             ChannelCount = log.ChannelCount;
         }
-        public bool IsSelect { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public bool IsSelect
+        {
+            get => _isSelect;
+            set
+            {
+                if (_isSelect == value)
+                {
+                    return;
+                }
+
+                _isSelect = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelect)));
+            }
+        }
     }
     public partial class PalletChaiLogViewModel(LinxContext context) : ObservableRecipient
     {
